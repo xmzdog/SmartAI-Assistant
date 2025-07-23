@@ -1,0 +1,399 @@
+25-07-23.00:42:51.782 [main            ] INFO  Application            - Starting Application using Java 21.0.7 with PID 61200 (C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant\dev-fetch-app\target\classes started by 86188 in C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant)
+25-07-23.00:42:51.784 [main            ] INFO  Application            - The following 1 profile is active: "dev"
+25-07-23.00:42:52.940 [main            ] WARN  AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanDefinitionStoreException: Failed to process import candidates for configuration class [com.onepiece.Application]: Component scan for configuration class [org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration$PlainFunctionScanConfiguration] could not be used with conditions in REGISTER_BEAN phase: [org.springframework.boot.autoconfigure.condition.OnBeanCondition@ef60710]
+25-07-23.00:42:52.960 [main            ] INFO  ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+25-07-23.00:42:52.995 [main            ] ERROR SpringApplication      - Application run failed
+org.springframework.beans.factory.BeanDefinitionStoreException: Failed to process import candidates for configuration class [com.onepiece.Application]: Component scan for configuration class [org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration$PlainFunctionScanConfiguration] could not be used with conditions in REGISTER_BEAN phase: [org.springframework.boot.autoconfigure.condition.OnBeanCondition@ef60710]
+	at org.springframework.context.annotation.ConfigurationClassParser.processImports(ConfigurationClassParser.java:626)
+	at org.springframework.context.annotation.ConfigurationClassParser$DeferredImportSelectorGroupingHandler.lambda$processGroupImports$1(ConfigurationClassParser.java:849)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.context.annotation.ConfigurationClassParser$DeferredImportSelectorGroupingHandler.processGroupImports(ConfigurationClassParser.java:846)
+	at org.springframework.context.annotation.ConfigurationClassParser$DeferredImportSelectorHandler.process(ConfigurationClassParser.java:816)
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:197)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:418)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:290)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118)
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:791)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:609)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at com.onepiece.Application.main(Application.java:14)
+Caused by: org.springframework.context.ApplicationContextException: Component scan for configuration class [org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration$PlainFunctionScanConfiguration] could not be used with conditions in REGISTER_BEAN phase: [org.springframework.boot.autoconfigure.condition.OnBeanCondition@ef60710]
+	at org.springframework.context.annotation.ConfigurationClassParser.doProcessConfigurationClass(ConfigurationClassParser.java:340)
+	at org.springframework.context.annotation.ConfigurationClassParser.processConfigurationClass(ConfigurationClassParser.java:280)
+	at org.springframework.context.annotation.ConfigurationClassParser.processMemberClasses(ConfigurationClassParser.java:426)
+	at org.springframework.context.annotation.ConfigurationClassParser.doProcessConfigurationClass(ConfigurationClassParser.java:307)
+	at org.springframework.context.annotation.ConfigurationClassParser.processConfigurationClass(ConfigurationClassParser.java:280)
+	at org.springframework.context.annotation.ConfigurationClassParser.processImports(ConfigurationClassParser.java:616)
+	... 18 common frames omitted
+25-07-23.00:43:29.403 [main            ] INFO  Application            - Starting Application using Java 21.0.7 with PID 29852 (C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant\dev-fetch-app\target\classes started by 86188 in C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant)
+25-07-23.00:43:29.406 [main            ] INFO  Application            - The following 1 profile is active: "dev"
+25-07-23.00:43:30.539 [main            ] WARN  AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanDefinitionStoreException: Failed to process import candidates for configuration class [com.onepiece.Application]: Component scan for configuration class [org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration$PlainFunctionScanConfiguration] could not be used with conditions in REGISTER_BEAN phase: [org.springframework.boot.autoconfigure.condition.OnBeanCondition@9fc9f91]
+25-07-23.00:43:30.550 [main            ] INFO  ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+25-07-23.00:43:30.583 [main            ] ERROR SpringApplication      - Application run failed
+org.springframework.beans.factory.BeanDefinitionStoreException: Failed to process import candidates for configuration class [com.onepiece.Application]: Component scan for configuration class [org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration$PlainFunctionScanConfiguration] could not be used with conditions in REGISTER_BEAN phase: [org.springframework.boot.autoconfigure.condition.OnBeanCondition@9fc9f91]
+	at org.springframework.context.annotation.ConfigurationClassParser.processImports(ConfigurationClassParser.java:626)
+	at org.springframework.context.annotation.ConfigurationClassParser$DeferredImportSelectorGroupingHandler.lambda$processGroupImports$1(ConfigurationClassParser.java:849)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.context.annotation.ConfigurationClassParser$DeferredImportSelectorGroupingHandler.processGroupImports(ConfigurationClassParser.java:846)
+	at org.springframework.context.annotation.ConfigurationClassParser$DeferredImportSelectorHandler.process(ConfigurationClassParser.java:816)
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:197)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:418)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:290)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118)
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:791)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:609)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at com.onepiece.Application.main(Application.java:14)
+Caused by: org.springframework.context.ApplicationContextException: Component scan for configuration class [org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration$PlainFunctionScanConfiguration] could not be used with conditions in REGISTER_BEAN phase: [org.springframework.boot.autoconfigure.condition.OnBeanCondition@9fc9f91]
+	at org.springframework.context.annotation.ConfigurationClassParser.doProcessConfigurationClass(ConfigurationClassParser.java:340)
+	at org.springframework.context.annotation.ConfigurationClassParser.processConfigurationClass(ConfigurationClassParser.java:280)
+	at org.springframework.context.annotation.ConfigurationClassParser.processMemberClasses(ConfigurationClassParser.java:426)
+	at org.springframework.context.annotation.ConfigurationClassParser.doProcessConfigurationClass(ConfigurationClassParser.java:307)
+	at org.springframework.context.annotation.ConfigurationClassParser.processConfigurationClass(ConfigurationClassParser.java:280)
+	at org.springframework.context.annotation.ConfigurationClassParser.processImports(ConfigurationClassParser.java:616)
+	... 18 common frames omitted
+25-07-23.00:47:33.285 [main            ] INFO  Application            - Starting Application using Java 21.0.7 with PID 60612 (C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant\dev-fetch-app\target\classes started by 86188 in C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant)
+25-07-23.00:47:33.288 [main            ] INFO  Application            - The following 1 profile is active: "dev"
+25-07-23.00:47:34.273 [main            ] WARN  AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanDefinitionStoreException: Failed to process import candidates for configuration class [com.onepiece.Application]: Component scan for configuration class [org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration$PlainFunctionScanConfiguration] could not be used with conditions in REGISTER_BEAN phase: [org.springframework.boot.autoconfigure.condition.OnBeanCondition@28bdbe88]
+25-07-23.00:47:34.283 [main            ] INFO  ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+25-07-23.00:47:34.311 [main            ] ERROR SpringApplication      - Application run failed
+org.springframework.beans.factory.BeanDefinitionStoreException: Failed to process import candidates for configuration class [com.onepiece.Application]: Component scan for configuration class [org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration$PlainFunctionScanConfiguration] could not be used with conditions in REGISTER_BEAN phase: [org.springframework.boot.autoconfigure.condition.OnBeanCondition@28bdbe88]
+	at org.springframework.context.annotation.ConfigurationClassParser.processImports(ConfigurationClassParser.java:626)
+	at org.springframework.context.annotation.ConfigurationClassParser$DeferredImportSelectorGroupingHandler.lambda$processGroupImports$1(ConfigurationClassParser.java:849)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.context.annotation.ConfigurationClassParser$DeferredImportSelectorGroupingHandler.processGroupImports(ConfigurationClassParser.java:846)
+	at org.springframework.context.annotation.ConfigurationClassParser$DeferredImportSelectorHandler.process(ConfigurationClassParser.java:816)
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:197)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:418)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:290)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118)
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:791)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:609)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at com.onepiece.Application.main(Application.java:14)
+Caused by: org.springframework.context.ApplicationContextException: Component scan for configuration class [org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration$PlainFunctionScanConfiguration] could not be used with conditions in REGISTER_BEAN phase: [org.springframework.boot.autoconfigure.condition.OnBeanCondition@28bdbe88]
+	at org.springframework.context.annotation.ConfigurationClassParser.doProcessConfigurationClass(ConfigurationClassParser.java:340)
+	at org.springframework.context.annotation.ConfigurationClassParser.processConfigurationClass(ConfigurationClassParser.java:280)
+	at org.springframework.context.annotation.ConfigurationClassParser.processMemberClasses(ConfigurationClassParser.java:426)
+	at org.springframework.context.annotation.ConfigurationClassParser.doProcessConfigurationClass(ConfigurationClassParser.java:307)
+	at org.springframework.context.annotation.ConfigurationClassParser.processConfigurationClass(ConfigurationClassParser.java:280)
+	at org.springframework.context.annotation.ConfigurationClassParser.processImports(ConfigurationClassParser.java:616)
+	... 18 common frames omitted
+25-07-23.00:49:14.293 [main            ] INFO  Application            - Starting Application using Java 21.0.7 with PID 35208 (C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant\dev-fetch-app\target\classes started by 86188 in C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant)
+25-07-23.00:49:14.296 [main            ] INFO  Application            - The following 1 profile is active: "dev"
+25-07-23.00:49:15.132 [main            ] WARN  AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanDefinitionStoreException: Failed to process import candidates for configuration class [com.onepiece.Application]: Component scan for configuration class [org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration$PlainFunctionScanConfiguration] could not be used with conditions in REGISTER_BEAN phase: [org.springframework.boot.autoconfigure.condition.OnBeanCondition@7a8406c2]
+25-07-23.00:49:15.141 [main            ] INFO  ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+25-07-23.00:49:15.166 [main            ] ERROR SpringApplication      - Application run failed
+org.springframework.beans.factory.BeanDefinitionStoreException: Failed to process import candidates for configuration class [com.onepiece.Application]: Component scan for configuration class [org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration$PlainFunctionScanConfiguration] could not be used with conditions in REGISTER_BEAN phase: [org.springframework.boot.autoconfigure.condition.OnBeanCondition@7a8406c2]
+	at org.springframework.context.annotation.ConfigurationClassParser.processImports(ConfigurationClassParser.java:626)
+	at org.springframework.context.annotation.ConfigurationClassParser$DeferredImportSelectorGroupingHandler.lambda$processGroupImports$1(ConfigurationClassParser.java:849)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.context.annotation.ConfigurationClassParser$DeferredImportSelectorGroupingHandler.processGroupImports(ConfigurationClassParser.java:846)
+	at org.springframework.context.annotation.ConfigurationClassParser$DeferredImportSelectorHandler.process(ConfigurationClassParser.java:816)
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:197)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:418)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:290)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118)
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:791)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:609)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at com.onepiece.Application.main(Application.java:14)
+Caused by: org.springframework.context.ApplicationContextException: Component scan for configuration class [org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration$PlainFunctionScanConfiguration] could not be used with conditions in REGISTER_BEAN phase: [org.springframework.boot.autoconfigure.condition.OnBeanCondition@7a8406c2]
+	at org.springframework.context.annotation.ConfigurationClassParser.doProcessConfigurationClass(ConfigurationClassParser.java:340)
+	at org.springframework.context.annotation.ConfigurationClassParser.processConfigurationClass(ConfigurationClassParser.java:280)
+	at org.springframework.context.annotation.ConfigurationClassParser.processMemberClasses(ConfigurationClassParser.java:426)
+	at org.springframework.context.annotation.ConfigurationClassParser.doProcessConfigurationClass(ConfigurationClassParser.java:307)
+	at org.springframework.context.annotation.ConfigurationClassParser.processConfigurationClass(ConfigurationClassParser.java:280)
+	at org.springframework.context.annotation.ConfigurationClassParser.processImports(ConfigurationClassParser.java:616)
+	... 18 common frames omitted
+25-07-23.00:49:42.599 [main            ] INFO  Application            - Starting Application using Java 21.0.7 with PID 50380 (C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant\dev-fetch-app\target\classes started by 86188 in C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant)
+25-07-23.00:49:42.602 [main            ] INFO  Application            - The following 1 profile is active: "dev"
+25-07-23.00:49:43.473 [main            ] WARN  AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanDefinitionStoreException: Failed to process import candidates for configuration class [com.onepiece.Application]: Component scan for configuration class [org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration$PlainFunctionScanConfiguration] could not be used with conditions in REGISTER_BEAN phase: [org.springframework.boot.autoconfigure.condition.OnBeanCondition@2aeefcc]
+25-07-23.00:49:43.482 [main            ] INFO  ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+25-07-23.00:49:43.506 [main            ] ERROR SpringApplication      - Application run failed
+org.springframework.beans.factory.BeanDefinitionStoreException: Failed to process import candidates for configuration class [com.onepiece.Application]: Component scan for configuration class [org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration$PlainFunctionScanConfiguration] could not be used with conditions in REGISTER_BEAN phase: [org.springframework.boot.autoconfigure.condition.OnBeanCondition@2aeefcc]
+	at org.springframework.context.annotation.ConfigurationClassParser.processImports(ConfigurationClassParser.java:626)
+	at org.springframework.context.annotation.ConfigurationClassParser$DeferredImportSelectorGroupingHandler.lambda$processGroupImports$1(ConfigurationClassParser.java:849)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.context.annotation.ConfigurationClassParser$DeferredImportSelectorGroupingHandler.processGroupImports(ConfigurationClassParser.java:846)
+	at org.springframework.context.annotation.ConfigurationClassParser$DeferredImportSelectorHandler.process(ConfigurationClassParser.java:816)
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:197)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:418)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:290)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118)
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:791)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:609)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at com.onepiece.Application.main(Application.java:14)
+Caused by: org.springframework.context.ApplicationContextException: Component scan for configuration class [org.springframework.cloud.function.context.config.ContextFunctionCatalogAutoConfiguration$PlainFunctionScanConfiguration] could not be used with conditions in REGISTER_BEAN phase: [org.springframework.boot.autoconfigure.condition.OnBeanCondition@2aeefcc]
+	at org.springframework.context.annotation.ConfigurationClassParser.doProcessConfigurationClass(ConfigurationClassParser.java:340)
+	at org.springframework.context.annotation.ConfigurationClassParser.processConfigurationClass(ConfigurationClassParser.java:280)
+	at org.springframework.context.annotation.ConfigurationClassParser.processMemberClasses(ConfigurationClassParser.java:426)
+	at org.springframework.context.annotation.ConfigurationClassParser.doProcessConfigurationClass(ConfigurationClassParser.java:307)
+	at org.springframework.context.annotation.ConfigurationClassParser.processConfigurationClass(ConfigurationClassParser.java:280)
+	at org.springframework.context.annotation.ConfigurationClassParser.processImports(ConfigurationClassParser.java:616)
+	... 18 common frames omitted
+25-07-23.00:54:43.129 [main            ] INFO  Application            - Starting Application using Java 21.0.7 with PID 46484 (C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant\dev-fetch-app\target\classes started by 86188 in C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant)
+25-07-23.00:54:43.132 [main            ] INFO  Application            - The following 1 profile is active: "dev"
+25-07-23.00:54:44.320 [main            ] WARN  AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: java.lang.IllegalStateException: Error processing condition on org.springframework.ai.autoconfigure.ollama.OllamaAutoConfiguration.ollamaChatClient
+25-07-23.00:54:44.329 [main            ] INFO  ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+25-07-23.00:54:44.358 [main            ] ERROR SpringApplication      - Application run failed
+java.lang.IllegalStateException: Error processing condition on org.springframework.ai.autoconfigure.ollama.OllamaAutoConfiguration.ollamaChatClient
+	at org.springframework.boot.autoconfigure.condition.SpringBootCondition.matches(SpringBootCondition.java:60)
+	at org.springframework.context.annotation.ConditionEvaluator.shouldSkip(ConditionEvaluator.java:99)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForBeanMethod(ConfigurationClassBeanDefinitionReader.java:184)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForConfigurationClass(ConfigurationClassBeanDefinitionReader.java:145)
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitions(ConfigurationClassBeanDefinitionReader.java:121)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:430)
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:290)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349)
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118)
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:791)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:609)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350)
+	at com.onepiece.Application.main(Application.java:18)
+Caused by: java.lang.IllegalStateException: @ConditionalOnMissingBean did not specify a bean using type, name or annotation and the attempt to deduce the bean's type failed
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition$Spec.validate(OnBeanCondition.java:639)
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition$Spec.<init>(OnBeanCondition.java:587)
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition.getMatchOutcome(OnBeanCondition.java:141)
+	at org.springframework.boot.autoconfigure.condition.SpringBootCondition.matches(SpringBootCondition.java:47)
+	... 17 common frames omitted
+Caused by: org.springframework.boot.autoconfigure.condition.OnBeanCondition$BeanTypeDeductionException: Failed to deduce bean type for org.springframework.ai.autoconfigure.ollama.OllamaAutoConfiguration.ollamaChatClient
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition$Spec.deducedBeanTypeForBeanMethod(OnBeanCondition.java:669)
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition$Spec.deducedBeanType(OnBeanCondition.java:658)
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition$Spec.<init>(OnBeanCondition.java:580)
+	... 19 common frames omitted
+Caused by: java.lang.ClassNotFoundException: org.springframework.ai.ollama.OllamaChatClient
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:534)
+	at java.base/java.lang.Class.forName(Class.java:513)
+	at org.springframework.boot.autoconfigure.condition.FilteringSpringBootCondition.resolve(FilteringSpringBootCondition.java:108)
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition$Spec.getReturnType(OnBeanCondition.java:677)
+	at org.springframework.boot.autoconfigure.condition.OnBeanCondition$Spec.deducedBeanTypeForBeanMethod(OnBeanCondition.java:665)
+	... 21 common frames omitted
+25-07-23.01:33:41.187 [main            ] INFO  Application            - Starting Application using Java 21.0.7 with PID 25348 (C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant\dev-fetch-app\target\classes started by 86188 in C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant)
+25-07-23.01:33:41.190 [main            ] INFO  Application            - The following 1 profile is active: "dev"
+25-07-23.01:33:43.242 [main            ] INFO  RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+25-07-23.01:33:43.250 [main            ] INFO  RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+25-07-23.01:33:43.322 [main            ] INFO  RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 36 ms. Found 0 Redis repository interfaces.
+25-07-23.01:33:44.890 [main            ] INFO  TomcatWebServer        - Tomcat initialized with port 8090 (http)
+25-07-23.01:33:44.943 [main            ] INFO  Http11NioProtocol      - Initializing ProtocolHandler ["http-nio-8090"]
+25-07-23.01:33:44.946 [main            ] INFO  StandardService        - Starting service [Tomcat]
+25-07-23.01:33:44.946 [main            ] INFO  StandardEngine         - Starting Servlet engine: [Apache Tomcat/10.1.39]
+25-07-23.01:33:45.184 [main            ] INFO  [/]                    - Initializing Spring embedded WebApplicationContext
+25-07-23.01:33:45.184 [main            ] INFO  ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3892 ms
+25-07-23.01:33:46.224 [main            ] WARN  AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'ollamaRAGController': Injection of resource dependencies failed
+25-07-23.01:33:46.228 [main            ] INFO  StandardService        - Stopping service [Tomcat]
+25-07-23.01:33:46.254 [main            ] INFO  ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+25-07-23.01:33:46.280 [main            ] ERROR LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+A component required a bean of type 'org.springframework.ai.transformer.splitter.TokenTextSplitter' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'org.springframework.ai.transformer.splitter.TokenTextSplitter' in your configuration.
+
+25-07-23.22:16:24.451 [main            ] INFO  Application            - Starting Application using Java 21.0.7 with PID 56092 (C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant\dev-fetch-app\target\classes started by 86188 in C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant)
+25-07-23.22:16:24.453 [main            ] INFO  Application            - The following 1 profile is active: "dev"
+25-07-23.22:16:25.714 [main            ] INFO  RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+25-07-23.22:16:25.718 [main            ] INFO  RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+25-07-23.22:16:25.782 [main            ] INFO  RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 36 ms. Found 0 Redis repository interfaces.
+25-07-23.22:16:26.826 [main            ] INFO  TomcatWebServer        - Tomcat initialized with port 8090 (http)
+25-07-23.22:16:26.843 [main            ] INFO  Http11NioProtocol      - Initializing ProtocolHandler ["http-nio-8090"]
+25-07-23.22:16:26.845 [main            ] INFO  StandardService        - Starting service [Tomcat]
+25-07-23.22:16:26.845 [main            ] INFO  StandardEngine         - Starting Servlet engine: [Apache Tomcat/10.1.39]
+25-07-23.22:16:26.934 [main            ] INFO  [/]                    - Initializing Spring embedded WebApplicationContext
+25-07-23.22:16:26.934 [main            ] INFO  ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2418 ms
+25-07-23.22:16:27.455 [main            ] WARN  AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'ollamaRAGController': Injection of resource dependencies failed
+25-07-23.22:16:27.459 [main            ] INFO  StandardService        - Stopping service [Tomcat]
+25-07-23.22:16:27.479 [main            ] INFO  ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+25-07-23.22:16:27.505 [main            ] ERROR LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+A component required a bean of type 'org.springframework.ai.transformer.splitter.TokenTextSplitter' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'org.springframework.ai.transformer.splitter.TokenTextSplitter' in your configuration.
+
+25-07-23.22:16:52.019 [main            ] INFO  Application            - Starting Application using Java 21.0.7 with PID 60552 (C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant\dev-fetch-app\target\classes started by 86188 in C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant)
+25-07-23.22:16:52.022 [main            ] INFO  Application            - The following 1 profile is active: "dev"
+25-07-23.22:16:53.206 [main            ] INFO  RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+25-07-23.22:16:53.211 [main            ] INFO  RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+25-07-23.22:16:53.288 [main            ] INFO  RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 39 ms. Found 0 Redis repository interfaces.
+25-07-23.22:16:54.425 [main            ] INFO  TomcatWebServer        - Tomcat initialized with port 8090 (http)
+25-07-23.22:16:54.446 [main            ] INFO  Http11NioProtocol      - Initializing ProtocolHandler ["http-nio-8090"]
+25-07-23.22:16:54.448 [main            ] INFO  StandardService        - Starting service [Tomcat]
+25-07-23.22:16:54.448 [main            ] INFO  StandardEngine         - Starting Servlet engine: [Apache Tomcat/10.1.39]
+25-07-23.22:16:54.563 [main            ] INFO  [/]                    - Initializing Spring embedded WebApplicationContext
+25-07-23.22:16:54.563 [main            ] INFO  ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2464 ms
+25-07-23.22:16:55.709 [main            ] INFO  Version                - Redisson 3.44.0
+25-07-23.22:16:56.550 [redisson-netty-1-4] INFO  ConnectionsHolder      - 1 connections initialized for 14.103.155.193/14.103.155.193:16379
+25-07-23.22:17:01.275 [redisson-netty-1-13] INFO  ConnectionsHolder      - 5 connections initialized for 14.103.155.193/14.103.155.193:16379
+25-07-23.22:17:01.973 [main            ] INFO  Http11NioProtocol      - Starting ProtocolHandler ["http-nio-8090"]
+25-07-23.22:17:01.981 [main            ] INFO  TomcatWebServer        - Tomcat started on port 8090 (http) with context path '/'
+25-07-23.22:17:01.989 [main            ] INFO  Application            - Started Application in 10.949 seconds (process running for 12.132)
+25-07-23.22:17:25.828 [http-nio-8090-exec-1] INFO  [/]                    - Initializing Spring DispatcherServlet 'dispatcherServlet'
+25-07-23.22:17:25.829 [http-nio-8090-exec-1] INFO  DispatcherServlet      - Initializing Servlet 'dispatcherServlet'
+25-07-23.22:17:25.831 [http-nio-8090-exec-1] INFO  DispatcherServlet      - Completed initialization in 2 ms
+25-07-23.22:17:26.275 [http-nio-8090-exec-1] ERROR [dispatcherServlet]    - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: org.springframework.ai.retry.NonTransientAiException: 404 - {"error":"model \"mistral\" not found, try pulling it first"}] with root cause
+org.springframework.ai.retry.NonTransientAiException: 404 - {"error":"model \"mistral\" not found, try pulling it first"}
+	at org.springframework.ai.retry.RetryUtils$1.handleError(RetryUtils.java:63)
+	at org.springframework.web.client.ResponseErrorHandler.handleError(ResponseErrorHandler.java:58)
+	at org.springframework.web.client.StatusHandler.lambda$fromErrorHandler$1(StatusHandler.java:71)
+	at org.springframework.web.client.StatusHandler.handle(StatusHandler.java:146)
+	at org.springframework.web.client.DefaultRestClient$DefaultResponseSpec.applyStatusHandlers(DefaultRestClient.java:826)
+	at org.springframework.web.client.DefaultRestClient$DefaultResponseSpec.lambda$readBody$4(DefaultRestClient.java:815)
+	at org.springframework.web.client.DefaultRestClient.readWithMessageConverters(DefaultRestClient.java:215)
+	at org.springframework.web.client.DefaultRestClient$DefaultResponseSpec.readBody(DefaultRestClient.java:814)
+	at org.springframework.web.client.DefaultRestClient$DefaultResponseSpec.lambda$body$0(DefaultRestClient.java:745)
+	at org.springframework.web.client.DefaultRestClient$DefaultRequestBodyUriSpec.exchangeInternal(DefaultRestClient.java:574)
+	at org.springframework.web.client.DefaultRestClient$DefaultRequestBodyUriSpec.exchange(DefaultRestClient.java:535)
+	at org.springframework.web.client.RestClient$RequestHeadersSpec.exchange(RestClient.java:677)
+	at org.springframework.web.client.DefaultRestClient$DefaultResponseSpec.executeAndExtract(DefaultRestClient.java:809)
+	at org.springframework.web.client.DefaultRestClient$DefaultResponseSpec.body(DefaultRestClient.java:745)
+	at org.springframework.ai.ollama.api.OllamaApi.chat(OllamaApi.java:115)
+	at org.springframework.ai.ollama.OllamaChatModel.lambda$internalCall$2(OllamaChatModel.java:236)
+	at io.micrometer.observation.Observation.observe(Observation.java:564)
+	at org.springframework.ai.ollama.OllamaChatModel.internalCall(OllamaChatModel.java:234)
+	at org.springframework.ai.ollama.OllamaChatModel.call(OllamaChatModel.java:219)
+	at com.onepiece.xmz.onepiece.trigger.demo.OllamaApiController.generate(OllamaApiController.java:27)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+25-07-23.22:18:16.727 [SpringApplicationShutdownHook] INFO  GracefulShutdown       - Commencing graceful shutdown. Waiting for active requests to complete
+25-07-23.22:18:16.742 [tomcat-shutdown ] INFO  GracefulShutdown       - Graceful shutdown complete
+25-07-23.22:18:25.704 [main            ] INFO  Application            - Starting Application using Java 21.0.7 with PID 67852 (C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant\dev-fetch-app\target\classes started by 86188 in C:\xmz_xiangmu\2025\SmartAI-Assistant\SmartAI-Assistant)
+25-07-23.22:18:25.707 [main            ] INFO  Application            - The following 1 profile is active: "dev"
+25-07-23.22:18:27.136 [main            ] INFO  RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+25-07-23.22:18:27.140 [main            ] INFO  RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+25-07-23.22:18:27.197 [main            ] INFO  RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 25 ms. Found 0 Redis repository interfaces.
+25-07-23.22:18:28.694 [main            ] INFO  TomcatWebServer        - Tomcat initialized with port 8090 (http)
+25-07-23.22:18:28.732 [main            ] INFO  Http11NioProtocol      - Initializing ProtocolHandler ["http-nio-8090"]
+25-07-23.22:18:28.737 [main            ] INFO  StandardService        - Starting service [Tomcat]
+25-07-23.22:18:28.738 [main            ] INFO  StandardEngine         - Starting Servlet engine: [Apache Tomcat/10.1.39]
+25-07-23.22:18:28.931 [main            ] INFO  [/]                    - Initializing Spring embedded WebApplicationContext
+25-07-23.22:18:28.931 [main            ] INFO  ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3129 ms
+25-07-23.22:18:30.117 [main            ] INFO  Version                - Redisson 3.44.0
+25-07-23.22:18:30.467 [redisson-netty-1-4] INFO  ConnectionsHolder      - 1 connections initialized for 14.103.155.193/14.103.155.193:16379
+25-07-23.22:18:30.606 [redisson-netty-1-13] INFO  ConnectionsHolder      - 5 connections initialized for 14.103.155.193/14.103.155.193:16379
+25-07-23.22:18:31.628 [main            ] INFO  Http11NioProtocol      - Starting ProtocolHandler ["http-nio-8090"]
+25-07-23.22:18:31.639 [main            ] INFO  TomcatWebServer        - Tomcat started on port 8090 (http) with context path '/'
+25-07-23.22:18:31.653 [main            ] INFO  Application            - Started Application in 7.276 seconds (process running for 8.581)
+25-07-23.22:18:37.174 [http-nio-8090-exec-1] INFO  [/]                    - Initializing Spring DispatcherServlet 'dispatcherServlet'
+25-07-23.22:18:37.174 [http-nio-8090-exec-1] INFO  DispatcherServlet      - Initializing Servlet 'dispatcherServlet'
+25-07-23.22:18:37.175 [http-nio-8090-exec-1] INFO  DispatcherServlet      - Completed initialization in 1 ms
+25-07-23.22:30:10.374 [SpringApplicationShutdownHook] INFO  GracefulShutdown       - Commencing graceful shutdown. Waiting for active requests to complete
+25-07-23.22:30:10.458 [tomcat-shutdown ] INFO  GracefulShutdown       - Graceful shutdown complete
