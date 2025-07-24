@@ -39,7 +39,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
-                <version>3.4.4</version>
+                <version>3.2.5</version>
             </dependency>
             <!-- 阿里云百练、灵积大模型服务 -->
             <dependency>
@@ -76,7 +76,7 @@
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <scope>runtime</scope>
+                <version>42.7.3</version>
             </dependency>
 <!--            <dependency>-->
 <!--                <groupId>org.springframework.ai</groupId>-->
@@ -158,6 +158,17 @@
                 <artifactId>lombok</artifactId>
                 <version>1.18.36</version>
                 <optional>true</optional>
+            </dependency>
+<!--                <dependency>-->
+<!--                    <groupId>org.springframework</groupId>-->
+<!--                    <artifactId>spring-core</artifactId>-->
+<!--                    <version>6.2.5</version>-->
+<!--                </dependency>-->
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>6.1.6</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>

@@ -4,6 +4,7 @@ package com.onepiece.xmz.app.config;
 
 import io.micrometer.observation.ObservationRegistry;
 
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.OllamaEmbeddingModel;
@@ -62,46 +63,45 @@ public class OllamaConfig {
     }
 
 
-//    @Bean
-//    public ToolCallingManager toolCallingManager() {
-//        return new ToolCallingManager();  // 你可能需要自定义或替换默认管理器
-//    }
-//
-//    @Bean
-//    public ObservationRegistry observationRegistry() {
-//        return new ObservationRegistry();  // 同样，如果有需要，可以自定义
-//    }
-//
-//    @Bean
-//    public ModelManagementOptions modelManagementOptions() {
-//        return new ModelManagementOptions();  // 提供适当的配置
-//    }
-//
-//    @Bean
-//    public OllamaOptions defaultOptions() {
-//        return new OllamaOptions();  // 提供适当的配置
-//    }
-//
-//    @Bean
-//    public OllamaChatModel ollamaChatModel(OllamaApi ollamaApi, OllamaOptions defaultOptions,
-//                                           ToolCallingManager toolCallingManager, ObservationRegistry observationRegistry,
-//                                           ModelManagementOptions modelManagementOptions) {
-//        return new OllamaChatModel(ollamaApi, defaultOptions, toolCallingManager, observationRegistry,
-//                modelManagementOptions);
-//    }
-//
-//    @Bean
-//    public TokenTextSplitter tokenTextSplitter() {
-//        return new TokenTextSplitter();
-//    }
-//
-//    @Bean
-//    public SimpleVectorStore simpleVectorStore(OllamaChatModel ollamaChatModel) {
-//        return new SimpleVectorStore(ollamaChatModel);
-//    }
-//
-//    @Bean
-//    public PgVectorStore pgVectorStore(OllamaChatModel ollamaChatModel, JdbcTemplate jdbcTemplate) {
-//        return new PgVectorStore(jdbcTemplate, ollamaChatModel);
-//    }
+    /**
+     * TokenTextSplitter = 自动文本分块器
+     *
+     * 长文本 → 分块 → 向量数据库 / RAG / LLM 输入
+     *
+     * 解决 token 限制 + 提高语义检索精度
+     * @return
+     * 将长文本按“token”长度拆分为多个小块，用于向量化（Embedding）或 RAG 检索时避免文本过长导致模型处理超限。
+     */
+    @Bean
+    public TokenTextSplitter tokenTextSplitter() {
+        return TokenTextSplitter.builder().build();
+    }
+
+    /**
+     * 👉 基于内存的简单向量存储，用于存储文档向量（embeddings）并支持向量检索。方便快速开发、调试，但不适合生产环境。
+     * @param embeddingModel
+     * @return
+     */
+    @Bean
+    public SimpleVectorStore simpleVectorStore(EmbeddingModel embeddingModel) {
+        return SimpleVectorStore.builder(embeddingModel)
+                .build();
+    }
+
+    /**
+     *  👉 基于 PostgreSQL + pgvector 插件 的向量数据库实现，用于 持久化存储向量数据 并进行高效的相似度检索。
+     * @param embeddingModel
+     * @param jdbcTemplate
+     * @return
+     *
+     * PgVectorStore = 生产级向量数据库解决方案，基于 Postgres + pgvector，持久化、可扩展、适合大规模知识库场景。
+     *
+     *  新增数据：add() 把文本封装为 Document → 使用 EmbeddingModel 生成向量 → 插入 PostgreSQL 的 pgvector 扩展表。
+     *
+     * 检索：similaritySearch() 对查询问题生成向量 → 调用 pgvector 的 <-> 余弦相似度 / L2 距离检索。
+     */
+    @Bean
+    public PgVectorStore pgVectorStore(EmbeddingModel embeddingModel, JdbcTemplate jdbcTemplate) {
+        return PgVectorStore.builder(jdbcTemplate, embeddingModel).build();
+    }
 }
