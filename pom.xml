@@ -12,6 +12,8 @@
         <module>dev-fetch-api</module>
         <module>dev-fetch-app</module>
         <module>dev-fetch-trigger</module>
+        <module>dev-fetch-damain</module>
+        <module>dev-fetch-types</module>
     </modules>
 
     <properties>
@@ -59,6 +61,8 @@
                 <version>1.0.0</version>
             </dependency>
 
+
+
             <dependency>
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-tika-document-reader</artifactId>
@@ -83,6 +87,30 @@
 <!--                <artifactId>spring-ai-transformers</artifactId>-->
 <!--                <version>0.8.1</version>-->
 <!--            </dependency>-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+                <version>3.2.5</version>
+            </dependency>
+
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>8.0.33</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>3.0.4</version> <!-- 版本根据 Spring Boot 版本调整 -->
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-actuator</artifactId>
+                <version>3.2.5</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>org.springframework.ai</groupId>

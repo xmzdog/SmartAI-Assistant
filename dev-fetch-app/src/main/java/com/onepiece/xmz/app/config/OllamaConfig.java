@@ -14,9 +14,11 @@ import org.springframework.ai.ollama.management.ModelManagementOptions;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @Configuration
@@ -35,16 +37,18 @@ public class OllamaConfig {
     /**
      * 这里使用defaultOptions 给 OllamaChatModel 设置默认的参数
      * .model 使用本地安装的模型
-     * .temperature 设置这个对话模型的“随机度”参数，或者叫温度值，数值越高，模型回答越发散、越有创意；越低越严谨保守；
+     * .temperature 设置这个对话模型的"随机度"参数，或者叫温度值，数值越高，模型回答越发散、越有创意；越低越严谨保守；
      * @param ollamaApi
      * @return
      */
     @Bean
+    @Primary
     public OllamaChatModel ollamaChatModelByDeepseek(OllamaApi ollamaApi) {
         return OllamaChatModel.builder()
                 .ollamaApi(ollamaApi)
                 .defaultOptions(OllamaOptions.builder()
-                        .model("deepseek-r1:1.5b")     // 模型
+//                        .model("deepseek-r1:1.5b")     // 模型
+                        .model("qwen2.5:1.5b")     // 模型
                         .temperature(0.7)
                         .build())
                 .build();
@@ -91,7 +95,7 @@ public class OllamaConfig {
     /**
      *  👉 基于 PostgreSQL + pgvector 插件 的向量数据库实现，用于 持久化存储向量数据 并进行高效的相似度检索。
      * @param embeddingModel
-     * @param jdbcTemplate
+     * @param pgVectorJdbcTemplate 专门用于PostgreSQL向量存储的JdbcTemplate
      * @return
      *
      * PgVectorStore = 生产级向量数据库解决方案，基于 Postgres + pgvector，持久化、可扩展、适合大规模知识库场景。
@@ -101,7 +105,8 @@ public class OllamaConfig {
      * 检索：similaritySearch() 对查询问题生成向量 → 调用 pgvector 的 <-> 余弦相似度 / L2 距离检索。
      */
     @Bean
-    public PgVectorStore pgVectorStore(EmbeddingModel embeddingModel, JdbcTemplate jdbcTemplate) {
-        return PgVectorStore.builder(jdbcTemplate, embeddingModel).build();
+    public PgVectorStore pgVectorStore(EmbeddingModel embeddingModel, 
+                                       @Qualifier("pgVectorJdbcTemplate") JdbcTemplate pgVectorJdbcTemplate) {
+        return PgVectorStore.builder(pgVectorJdbcTemplate, embeddingModel).build();
     }
 }
