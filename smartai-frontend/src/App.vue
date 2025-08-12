@@ -1,12 +1,13 @@
 <template>
   <div id="app" class="app-container">
-    <router-view />
+    <MainLayout />
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useSystemStore } from '@/stores/system'
+import MainLayout from '@/components/layout/MainLayout.vue'
 
 const systemStore = useSystemStore()
 

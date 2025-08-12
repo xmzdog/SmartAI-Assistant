@@ -26,16 +26,35 @@
           text-color="var(--text-primary)"
           active-text-color="white"
         >
-          <el-menu-item
-            v-for="route in routes"
-            :key="route.path"
-            :index="'/' + route.path"
-          >
-            <el-icon>
-              <component :is="route.meta?.icon || 'Document'" />
-            </el-icon>
-            <template #title>{{ route.meta?.title }}</template>
-          </el-menu-item>
+          <template v-for="route in routes" :key="route.path">
+            <el-sub-menu
+              v-if="route.children && route.children.length > 0"
+              :index="'/' + route.path"
+            >
+              <template #title>
+                <el-icon>
+                  <component :is="route.meta?.icon || 'Document'" />
+                </el-icon>
+                <span>{{ route.meta?.title }}</span>
+              </template>
+              <el-menu-item
+                v-for="child in route.children"
+                :key="child.path"
+                :index="'/' + route.path + '/' + child.path"
+              >
+                {{ child.meta?.title }}
+              </el-menu-item>
+            </el-sub-menu>
+            <el-menu-item
+              v-else
+              :index="'/' + route.path"
+            >
+              <el-icon>
+                <component :is="route.meta?.icon || 'Document'" />
+              </el-icon>
+              <template #title>{{ route.meta?.title }}</template>
+            </el-menu-item>
+          </template>
         </el-menu>
       </nav>
     </aside>
@@ -92,12 +111,14 @@
           />
           
           <!-- 设置 -->
-          <el-button
-            :icon="Setting"
-            @click="$router.push('/settings')"
-            text
-            circle
-          />
+          <el-tooltip content="系统设置">
+            <el-button
+              :icon="Setting"
+              text
+              circle
+              disabled
+            />
+          </el-tooltip>
         </div>
       </header>
       
@@ -119,7 +140,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useSystemStore } from '@/stores/system'
 import {
   Avatar, Expand, Fold, Moon, Sunny, Refresh, Setting,
-  Dashboard, List, Cpu, Tools, Monitor, Document, ChatDotRound, Files
+  Dashboard, Cpu, Tools, Monitor, Document, ChatLineSquare, FolderOpened, User, Timer
 } from '@element-plus/icons-vue'
 
 const route = useRoute()
@@ -132,14 +153,23 @@ const isCollapsed = ref(false)
 // 路由配置
 const routes = [
   { path: 'dashboard', meta: { title: '仪表板', icon: 'Dashboard' } },
-  { path: 'task', meta: { title: '任务管理', icon: 'List' } },
-  { path: 'chat', meta: { title: '智能对话', icon: 'ChatDotRound' } },
-  { path: 'knowledge-base', meta: { title: '知识库管理', icon: 'Files' } },
-  { path: 'manus', meta: { title: 'ManusAgent', icon: 'Cpu' } },
-  { path: 'agent', meta: { title: '智能Agent', icon: 'Avatar' } },
-  { path: 'reasoning', meta: { title: '深度推理', icon: 'Cpu' } },
-  { path: 'tools', meta: { title: '工具管理', icon: 'Tools' } },
-  { path: 'monitoring', meta: { title: '系统监控', icon: 'Monitor' } }
+  { path: 'chat', meta: { title: '智能对话', icon: 'ChatLineSquare' } },
+  { path: 'agent', meta: { title: '智能体列表', icon: 'User' } },
+  { path: 'agent/chat', meta: { title: 'Agent对话', icon: 'ChatLineSquare' } },
+  { path: 'model', meta: { title: '模型管理', icon: 'Cpu' } },
+  { path: 'knowledge', meta: { title: '知识库', icon: 'FolderOpened' } },
+  { 
+    path: 'system', 
+    meta: { title: '系统配置', icon: 'Setting' },
+    children: [
+      { path: 'prompt', meta: { title: '系统提示词' } },
+      { path: 'advisor', meta: { title: '顾问配置' } },
+      { path: 'tools', meta: { title: 'MCP工具' } }
+    ]
+  },
+  { path: 'task', meta: { title: '任务调度', icon: 'Timer' } },
+  { path: 'monitoring', meta: { title: '系统监控', icon: 'Monitor' } },
+  { path: 'settings', meta: { title: '系统设置', icon: 'Tools' } }
 ]
 
 // 计算属性

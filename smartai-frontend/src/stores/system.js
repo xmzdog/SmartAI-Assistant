@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { manusApi } from '@/api/manus'
 import { agentApi } from '@/api/agent'
 
 export const useSystemStore = defineStore('system', () => {
@@ -21,12 +20,7 @@ export const useSystemStore = defineStore('system', () => {
   const fetchAgentStatus = async () => {
     try {
       isLoading.value = true
-      const status = await manusApi.getStatus()
-      agentStatus.value = status
-    } catch (err) {
-      error.value = '获取Agent状态失败'
-      console.warn('获取Agent状态失败，使用模拟数据:', err)
-      // 使用模拟数据
+      // 使用模拟数据，因为后端还没有对应的状态接口
       agentStatus.value = {
         status: 'IDLE',
         activeTaskCount: 2,
@@ -35,6 +29,9 @@ export const useSystemStore = defineStore('system', () => {
         version: '1.0.0',
         memoryUsage: 65.2
       }
+    } catch (err) {
+      error.value = '获取Agent状态失败'
+      console.warn('获取Agent状态失败:', err)
     } finally {
       isLoading.value = false
     }
@@ -42,11 +39,7 @@ export const useSystemStore = defineStore('system', () => {
 
   const fetchStatistics = async () => {
     try {
-      const stats = await manusApi.getStatistics()
-      statistics.value = stats
-    } catch (err) {
-      console.warn('获取统计信息失败，使用模拟数据:', err)
-      // 使用模拟数据
+      // 使用模拟数据，因为后端还没有对应的统计接口
       statistics.value = {
         totalTasks: 156,
         completedTasks: 132,
@@ -58,13 +51,15 @@ export const useSystemStore = defineStore('system', () => {
         todayTasks: 12,
         successRate: 94.6
       }
+    } catch (err) {
+      console.warn('获取统计信息失败:', err)
     }
   }
 
   const fetchTools = async () => {
     try {
-      const toolList = await agentApi.getTools()
-      tools.value = toolList
+      // 使用模拟数据，因为后端还没有对应的工具接口
+      tools.value = []
     } catch (err) {
       console.error('获取工具列表失败:', err)
     }
@@ -72,8 +67,8 @@ export const useSystemStore = defineStore('system', () => {
 
   const healthCheck = async () => {
     try {
-      const health = await manusApi.healthCheck()
-      return health.status === 'healthy'
+      // 模拟健康检查
+      return true
     } catch (err) {
       console.error('健康检查失败:', err)
       return false
@@ -83,12 +78,13 @@ export const useSystemStore = defineStore('system', () => {
   const restartAgent = async () => {
     try {
       isLoading.value = true
-      await manusApi.restart()
+      // 模拟重启操作
+      await new Promise(resolve => setTimeout(resolve, 2000))
       // 重启后重新获取状态
       setTimeout(() => {
         fetchAgentStatus()
         fetchStatistics()
-      }, 3000)
+      }, 1000)
     } catch (err) {
       error.value = '重启Agent失败'
       throw err
@@ -99,7 +95,8 @@ export const useSystemStore = defineStore('system', () => {
 
   const cleanup = async () => {
     try {
-      await manusApi.cleanup()
+      // 模拟清理操作
+      await new Promise(resolve => setTimeout(resolve, 1000))
       // 清理后重新获取统计信息
       fetchStatistics()
     } catch (err) {
@@ -109,7 +106,9 @@ export const useSystemStore = defineStore('system', () => {
 
   const updateConfig = async (property, value) => {
     try {
-      await manusApi.updateConfig({ property, value })
+      // 模拟配置更新
+      await new Promise(resolve => setTimeout(resolve, 500))
+      console.log('配置已更新:', property, value)
     } catch (err) {
       error.value = '更新配置失败'
       throw err

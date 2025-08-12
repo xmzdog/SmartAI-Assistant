@@ -116,12 +116,13 @@
             try {
                 toggleLoading(true);
                 const formData = new FormData();
-                formData.append('ragTag', ragTag);
+                formData.append('name', ragTag);
+                formData.append('tag', ragTag);
                 Array.from(files).forEach(file => {
-                    formData.append('file', file);
+                    formData.append('files', file);
                 });
 
-                const response = await fetch('http://localhost:8090/api/v1/rag/file/upload', {
+                const response = await fetch('http://localhost:8090/api/v1/ai/agent/file/upload', {
                     method: 'POST',
                     body: formData
                 });

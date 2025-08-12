@@ -1,828 +1,488 @@
 <template>
-  <div class="monitoring page-container">
-      <div class="page-header">
-        <h1 class="page-title">系统监控</h1>
-        <p class="page-description">实时监控AI智能体系统的运行状态和性能指标</p>
-      </div>
+  <div class="monitoring-container">
+    <div class="page-header">
+      <h1>系统监控</h1>
+      <p>监控系统运行状态和性能指标</p>
+    </div>
 
-      <!-- 系统状态卡片 -->
-      <div class="status-cards">
-        <div class="status-card">
-          <div class="card-header">
-            <div class="card-title">
-              <el-icon size="20" color="#409eff"><Monitor /></el-icon>
-              <span>Agent状态</span>
-            </div>
-            <el-tag
-              :type="getStatusType(agentStatus?.status)"
-              effect="light"
-            >
-              {{ getStatusText(agentStatus?.status) }}
-            </el-tag>
-          </div>
-          <div class="card-content">
+    <!-- 系统状态概览 -->
+    <div class="status-overview">
+      <el-row :gutter="20">
+        <el-col :span="6">
+          <el-card class="status-card">
             <div class="status-item">
-              <span class="label">活跃任务:</span>
-              <span class="value">{{ agentStatus?.activeTaskCount || 0 }}</span>
+              <div class="status-icon" :class="{ 'status-healthy': systemStatus.healthy }">
+                <el-icon><Monitor /></el-icon>
+              </div>
+              <div class="status-info">
+                <h3>系统状态</h3>
+                <p :class="{ 'text-success': systemStatus.healthy, 'text-danger': !systemStatus.healthy }">
+                  {{ systemStatus.healthy ? '正常' : '异常' }}
+                </p>
+              </div>
             </div>
+          </el-card>
+        </el-col>
+        <el-col :span="6">
+          <el-card class="status-card">
             <div class="status-item">
-              <span class="label">运行时间:</span>
-              <span class="value">{{ agentStatus?.uptime || 'N/A' }}</span>
+              <div class="status-icon cpu">
+                <el-icon><Cpu /></el-icon>
+              </div>
+              <div class="status-info">
+                <h3>CPU使用率</h3>
+                <p>{{ systemMetrics.cpu }}%</p>
+              </div>
             </div>
+          </el-card>
+        </el-col>
+        <el-col :span="6">
+          <el-card class="status-card">
             <div class="status-item">
-              <span class="label">最后活动:</span>
-              <span class="value">{{ formatDateTime(agentStatus?.lastActivity) }}</span>
+              <div class="status-icon memory">
+                <el-icon><Odometer /></el-icon>
+              </div>
+              <div class="status-info">
+                <h3>内存使用率</h3>
+                <p>{{ systemMetrics.memory }}%</p>
+              </div>
             </div>
-          </div>
-        </div>
+          </el-card>
+        </el-col>
+        <el-col :span="6">
+          <el-card class="status-card">
+            <div class="status-item">
+              <div class="status-icon disk">
+                <el-icon><FolderOpened /></el-icon>
+              </div>
+              <div class="status-info">
+                <h3>磁盘使用率</h3>
+                <p>{{ systemMetrics.disk }}%</p>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
 
-        <div class="status-card">
+    <!-- 性能图表 -->
+    <div class="charts-section">
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-card>
+            <template #header>
+              <div class="card-header">
+                <span>CPU使用率趋势</span>
+                <el-button type="text" @click="refreshCharts">刷新</el-button>
+              </div>
+            </template>
+            <div class="chart-container" id="cpuChart"></div>
+          </el-card>
+        </el-col>
+        <el-col :span="12">
+          <el-card>
+            <template #header>
+              <div class="card-header">
+                <span>内存使用率趋势</span>
+                <el-button type="text" @click="refreshCharts">刷新</el-button>
+              </div>
+            </template>
+            <div class="chart-container" id="memoryChart"></div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
+
+    <!-- 系统日志 -->
+    <div class="logs-section">
+      <el-card>
+        <template #header>
           <div class="card-header">
-            <div class="card-title">
-              <el-icon size="20" color="#67c23a"><TrendCharts /></el-icon>
-              <span>系统负载</span>
-            </div>
-            <span class="load-value">{{ ((statistics?.systemLoad || 0) * 100).toFixed(1) }}%</span>
-          </div>
-          <div class="card-content">
-            <el-progress
-              :percentage="(statistics?.systemLoad || 0) * 100"
-              :color="getLoadColor(statistics?.systemLoad)"
-              :stroke-width="12"
-            />
-            <div class="load-description">
-              {{ getLoadDescription(statistics?.systemLoad) }}
+            <span>系统日志</span>
+            <div>
+              <el-select v-model="logLevel" placeholder="日志级别" style="margin-right: 10px; width: 120px">
+                <el-option label="全部" value="all"></el-option>
+                <el-option label="错误" value="error"></el-option>
+                <el-option label="警告" value="warning"></el-option>
+                <el-option label="信息" value="info"></el-option>
+              </el-select>
+              <el-button type="primary" @click="refreshLogs">刷新日志</el-button>
             </div>
           </div>
-        </div>
-
-        <div class="status-card">
-          <div class="card-header">
-            <div class="card-title">
-              <el-icon size="20" color="#e6a23c"><User /></el-icon>
-              <span>活跃用户</span>
-            </div>
-            <span class="user-count">{{ statistics?.activeUsers || 0 }}</span>
+        </template>
+        <div class="logs-container">
+          <div v-if="logs.length === 0" class="no-data">
+            暂无日志数据
           </div>
-          <div class="card-content">
-            <div class="user-chart">
-              <!-- 这里可以添加用户活跃度图表 -->
-              <div class="chart-placeholder">
-                <el-icon size="32" color="#c0c4cc"><DataAnalysis /></el-icon>
-                <span>用户活跃度图表</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="status-card">
-          <div class="card-header">
-            <div class="card-title">
-              <el-icon size="20" color="#f56c6c"><Clock /></el-icon>
-              <span>平均响应</span>
-            </div>
-            <span class="response-time">{{ formatTime(statistics?.averageExecutionTime) }}</span>
-          </div>
-          <div class="card-content">
-            <div class="response-chart">
-              <!-- 这里可以添加响应时间图表 -->
-              <div class="chart-placeholder">
-                <el-icon size="32" color="#c0c4cc"><DataLine /></el-icon>
-                <span>响应时间趋势</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 实时数据图表 -->
-      <div class="charts-section">
-        <div class="chart-container card">
-          <div class="chart-header">
-            <h3>任务执行趋势</h3>
-            <div class="chart-controls">
-              <el-radio-group v-model="timeRange" size="small">
-                <el-radio-button label="1h">1小时</el-radio-button>
-                <el-radio-button label="6h">6小时</el-radio-button>
-                <el-radio-button label="24h">24小时</el-radio-button>
-                <el-radio-button label="7d">7天</el-radio-button>
-              </el-radio-group>
-            </div>
-          </div>
-          <div class="chart-content">
-            <div class="chart-placeholder large">
-              <el-icon size="48" color="#c0c4cc"><TrendCharts /></el-icon>
-              <span>任务执行趋势图表</span>
-              <p>显示不同时间段的任务执行统计</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="chart-container card">
-          <div class="chart-header">
-            <h3>成功率统计</h3>
-          </div>
-          <div class="chart-content">
-            <div class="success-stats">
-              <div class="stat-item">
-                <div class="stat-circle success">
-                  <span>{{ getSuccessRate() }}%</span>
-                </div>
-                <div class="stat-label">总成功率</div>
-              </div>
-              
-              <div class="stat-details">
-                <div class="detail-item">
-                  <span class="detail-label">总任务数:</span>
-                  <span class="detail-value">{{ statistics?.totalTasks || 0 }}</span>
-                </div>
-                <div class="detail-item">
-                  <span class="detail-label">成功任务:</span>
-                  <span class="detail-value success">{{ statistics?.completedTasks || 0 }}</span>
-                </div>
-                <div class="detail-item">
-                  <span class="detail-label">失败任务:</span>
-                  <span class="detail-value failed">{{ statistics?.failedTasks || 0 }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 系统日志 -->
-      <div class="logs-section card">
-        <div class="section-header">
-          <h3>系统日志</h3>
-          <div class="log-controls">
-            <el-select v-model="logLevel" placeholder="日志级别" style="width: 120px;">
-              <el-option label="全部" value="" />
-              <el-option label="错误" value="error" />
-              <el-option label="警告" value="warning" />
-              <el-option label="信息" value="info" />
-              <el-option label="调试" value="debug" />
-            </el-select>
-            
-            <el-button :icon="Refresh" @click="refreshLogs" :loading="isLoadingLogs" text>
-              刷新
-            </el-button>
-            
-            <el-button :icon="Download" @click="downloadLogs" text>
-              导出日志
-            </el-button>
-          </div>
-        </div>
-        
-        <div class="logs-content">
-          <div v-if="logs.length === 0" class="empty-logs">
-            <el-icon size="32" color="#c0c4cc"><Document /></el-icon>
-            <span>暂无日志记录</span>
-          </div>
-          
           <div v-else class="log-list">
-            <div
-              v-for="(log, index) in filteredLogs"
-              :key="index"
+            <div 
+              v-for="log in filteredLogs" 
+              :key="log.id"
               class="log-item"
-              :class="log.level"
+              :class="`log-${log.level}`"
             >
-              <div class="log-time">{{ formatDateTime(log.timestamp) }}</div>
-              <div class="log-level">
-                <el-tag :type="getLogLevelType(log.level)" size="small">
-                  {{ log.level.toUpperCase() }}
-                </el-tag>
-              </div>
-              <div class="log-message">{{ log.message }}</div>
+              <span class="log-time">{{ formatTime(log.timestamp) }}</span>
+              <span class="log-level">{{ log.level.toUpperCase() }}</span>
+              <span class="log-message">{{ log.message }}</span>
             </div>
           </div>
-          
-          <div class="logs-pagination">
-            <el-pagination
-              v-model:current-page="logCurrentPage"
-              :page-size="logPageSize"
-              :total="filteredLogs.length"
-              layout="prev, pager, next"
-              small
-            />
-          </div>
         </div>
-      </div>
+      </el-card>
+    </div>
 
-      <!-- 性能指标 -->
-      <div class="metrics-section card">
-        <div class="section-header">
-          <h3>性能指标</h3>
-          <el-button :icon="Refresh" @click="refreshMetrics" :loading="isLoadingMetrics" text>
-            刷新指标
-          </el-button>
-        </div>
-        
-        <div class="metrics-grid">
-          <div class="metric-item">
-            <div class="metric-label">内存使用</div>
-            <div class="metric-value">
-              <el-progress
-                type="circle"
-                :percentage="75"
-                :width="60"
-                color="#409eff"
-              />
-              <span class="metric-text">75%</span>
-            </div>
+    <!-- 服务状态 -->
+    <div class="services-section">
+      <el-card>
+        <template #header>
+          <div class="card-header">
+            <span>服务状态</span>
+            <el-button type="primary" @click="refreshServices">刷新状态</el-button>
           </div>
-          
-          <div class="metric-item">
-            <div class="metric-label">CPU使用</div>
-            <div class="metric-value">
-              <el-progress
-                type="circle"
-                :percentage="45"
-                :width="60"
-                color="#67c23a"
-              />
-              <span class="metric-text">45%</span>
-            </div>
-          </div>
-          
-          <div class="metric-item">
-            <div class="metric-label">磁盘使用</div>
-            <div class="metric-value">
-              <el-progress
-                type="circle"
-                :percentage="60"
-                :width="60"
-                color="#e6a23c"
-              />
-              <span class="metric-text">60%</span>
-            </div>
-          </div>
-          
-          <div class="metric-item">
-            <div class="metric-label">网络I/O</div>
-            <div class="metric-value">
-              <el-progress
-                type="circle"
-                :percentage="30"
-                :width="60"
-                color="#909399"
-              />
-              <span class="metric-text">30%</span>
-            </div>
-          </div>
-        </div>
-      </div>
+        </template>
+        <el-table :data="services" style="width: 100%">
+          <el-table-column prop="name" label="服务名称" width="200"></el-table-column>
+          <el-table-column prop="status" label="状态" width="120">
+            <template #default="scope">
+              <el-tag :type="scope.row.status === 'running' ? 'success' : 'danger'">
+                {{ scope.row.status === 'running' ? '运行中' : '已停止' }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="port" label="端口" width="100"></el-table-column>
+          <el-table-column prop="uptime" label="运行时间" width="150"></el-table-column>
+          <el-table-column prop="description" label="描述"></el-table-column>
+          <el-table-column label="操作" width="150">
+            <template #default="scope">
+              <el-button 
+                v-if="scope.row.status === 'running'"
+                type="danger" 
+                size="small"
+                @click="stopService(scope.row)"
+              >
+                停止
+              </el-button>
+              <el-button 
+                v-else
+                type="success" 
+                size="small"
+                @click="startService(scope.row)"
+              >
+                启动
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-card>
+    </div>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { Monitor, Cpu, Odometer, FolderOpened } from '@element-plus/icons-vue'
 import { useSystemStore } from '@/stores/system'
-
-import {
-  Monitor, TrendCharts, User, Clock, DataAnalysis, DataLine,
-  Refresh, Download, Document
-} from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
-import dayjs from 'dayjs'
 
 const systemStore = useSystemStore()
 
-// 响应式数据
-const timeRange = ref('24h')
-const logLevel = ref('')
-const logCurrentPage = ref(1)
-const logPageSize = ref(20)
-const isLoadingLogs = ref(false)
-const isLoadingMetrics = ref(false)
-const refreshTimer = ref<NodeJS.Timeout | null>(null)
+// 系统状态
+const systemStatus = ref({
+  healthy: true
+})
 
-// 模拟日志数据
+// 系统指标
+const systemMetrics = ref({
+  cpu: 45,
+  memory: 68,
+  disk: 32
+})
+
+// 日志相关
+const logLevel = ref('all')
 const logs = ref([
   {
-    timestamp: new Date().toISOString(),
+    id: 1,
     level: 'info',
-    message: 'ManusAgent 任务执行成功 - 任务ID: task_12345'
+    message: '系统启动成功',
+    timestamp: new Date(Date.now() - 60000)
   },
   {
-    timestamp: new Date(Date.now() - 60000).toISOString(),
+    id: 2,
     level: 'warning',
-    message: '系统负载较高，建议优化资源配置'
+    message: 'API响应时间较长',
+    timestamp: new Date(Date.now() - 30000)
   },
   {
-    timestamp: new Date(Date.now() - 120000).toISOString(),
+    id: 3,
     level: 'error',
-    message: '任务执行失败 - 连接超时'
+    message: '数据库连接超时',
+    timestamp: new Date()
+  }
+])
+
+// 服务状态
+const services = ref([
+  {
+    id: 1,
+    name: 'SmartAI Core',
+    status: 'running',
+    port: 8080,
+    uptime: '2天 3小时',
+    description: '核心AI服务'
   },
   {
-    timestamp: new Date(Date.now() - 180000).toISOString(),
-    level: 'info',
-    message: '新用户连接 - 用户ID: user_789'
+    id: 2,
+    name: 'Database Service',
+    status: 'running',
+    port: 3306,
+    uptime: '2天 3小时',
+    description: '数据库服务'
+  },
+  {
+    id: 3,
+    name: 'Cache Service',
+    status: 'stopped',
+    port: 6379,
+    uptime: '-',
+    description: 'Redis缓存服务'
   }
 ])
 
 // 计算属性
-const agentStatus = computed(() => systemStore.agentStatus)
-const statistics = computed(() => systemStore.statistics)
-
 const filteredLogs = computed(() => {
-  let filtered = [...logs.value]
-  
-  if (logLevel.value) {
-    filtered = filtered.filter(log => log.level === logLevel.value)
+  if (logLevel.value === 'all') {
+    return logs.value
   }
-  
-  return filtered.slice(
-    (logCurrentPage.value - 1) * logPageSize.value,
-    logCurrentPage.value * logPageSize.value
-  )
+  return logs.value.filter(log => log.level === logLevel.value)
 })
 
 // 方法
-const getStatusType = (status?: string) => {
-  switch (status) {
-    case 'IDLE': return 'success'
-    case 'BUSY': return 'warning'
-    case 'ERROR': return 'danger'
-    default: return 'info'
-  }
+const refreshCharts = () => {
+  ElMessage.success('图表已刷新')
+  // 这里可以添加实际的图表刷新逻辑
 }
 
-const getStatusText = (status?: string) => {
-  switch (status) {
-    case 'IDLE': return '空闲'
-    case 'BUSY': return '忙碌'
-    case 'ERROR': return '错误'
-    default: return '未知'
-  }
+const refreshLogs = () => {
+  ElMessage.success('日志已刷新')
+  // 这里可以添加实际的日志刷新逻辑
 }
 
-const getLoadColor = (load?: number) => {
-  if (!load) return '#67c23a'
-  if (load < 0.5) return '#67c23a'
-  if (load < 0.8) return '#e6a23c'
-  return '#f56c6c'
+const refreshServices = () => {
+  ElMessage.success('服务状态已刷新')
+  // 这里可以添加实际的服务状态刷新逻辑
 }
 
-const getLoadDescription = (load?: number) => {
-  if (!load) return '系统空闲'
-  if (load < 0.3) return '系统空闲'
-  if (load < 0.6) return '负载正常'
-  if (load < 0.8) return '负载较高'
-  return '负载过高'
-}
-
-const getSuccessRate = () => {
-  const total = statistics.value?.totalTasks || 0
-  const completed = statistics.value?.completedTasks || 0
-  
-  if (total === 0) return 0
-  return Math.round((completed / total) * 100)
-}
-
-const getLogLevelType = (level: string) => {
-  switch (level) {
-    case 'error': return 'danger'
-    case 'warning': return 'warning'
-    case 'info': return 'primary'
-    case 'debug': return 'info'
-    default: return 'info'
-  }
-}
-
-const formatDateTime = (dateTime?: string) => {
-  if (!dateTime) return 'N/A'
-  return dayjs(dateTime).format('YYYY-MM-DD HH:mm:ss')
-}
-
-const formatTime = (seconds?: number) => {
-  if (!seconds) return 'N/A'
-  if (seconds < 1) return `${(seconds * 1000).toFixed(0)}ms`
-  if (seconds < 60) return `${seconds.toFixed(1)}s`
-  if (seconds < 3600) return `${(seconds / 60).toFixed(1)}m`
-  return `${(seconds / 3600).toFixed(1)}h`
-}
-
-const refreshLogs = async () => {
-  isLoadingLogs.value = true
+const startService = async (service) => {
   try {
-    // 模拟刷新日志
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    // 添加新的日志条目
-    logs.value.unshift({
-      timestamp: new Date().toISOString(),
-      level: 'info',
-      message: '日志已刷新'
+    await ElMessageBox.confirm(`确定要启动服务 ${service.name} 吗？`, '确认启动', {
+      type: 'warning'
     })
     
-    ElMessage.success('日志已更新')
-  } catch (error) {
-    ElMessage.error('刷新日志失败')
-  } finally {
-    isLoadingLogs.value = false
+    // 模拟启动服务
+    service.status = 'running'
+    service.uptime = '刚刚启动'
+    ElMessage.success(`服务 ${service.name} 启动成功`)
+  } catch {
+    // 用户取消
   }
 }
 
-const downloadLogs = () => {
-  const logText = logs.value
-    .map(log => `[${formatDateTime(log.timestamp)}] ${log.level.toUpperCase()}: ${log.message}`)
-    .join('\n')
-  
-  const blob = new Blob([logText], { type: 'text/plain' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = `system-logs-${dayjs().format('YYYY-MM-DD')}.log`
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
-  
-  ElMessage.success('日志已导出')
-}
-
-const refreshMetrics = async () => {
-  isLoadingMetrics.value = true
+const stopService = async (service) => {
   try {
-    await Promise.all([
-      systemStore.fetchAgentStatus(),
-      systemStore.fetchStatistics()
-    ])
-    ElMessage.success('指标已更新')
-  } catch (error) {
-    ElMessage.error('更新指标失败')
-  } finally {
-    isLoadingMetrics.value = false
+    await ElMessageBox.confirm(`确定要停止服务 ${service.name} 吗？`, '确认停止', {
+      type: 'warning'
+    })
+    
+    // 模拟停止服务
+    service.status = 'stopped'
+    service.uptime = '-'
+    ElMessage.success(`服务 ${service.name} 已停止`)
+  } catch {
+    // 用户取消
   }
 }
 
-const startAutoRefresh = () => {
-  refreshTimer.value = setInterval(() => {
-    if (systemStore.autoRefresh) {
-      refreshMetrics()
-    }
-  }, systemStore.refreshInterval * 1000)
+const formatTime = (timestamp) => {
+  return new Date(timestamp).toLocaleString()
 }
 
-const stopAutoRefresh = () => {
-  if (refreshTimer.value) {
-    clearInterval(refreshTimer.value)
-    refreshTimer.value = null
-  }
+// 模拟实时数据更新
+let metricsInterval
+const updateMetrics = () => {
+  systemMetrics.value.cpu = Math.floor(Math.random() * 100)
+  systemMetrics.value.memory = Math.floor(Math.random() * 100)
+  systemMetrics.value.disk = Math.floor(Math.random() * 100)
 }
 
-// 生命周期
 onMounted(() => {
-  refreshMetrics()
-  startAutoRefresh()
+  // 启动实时数据更新
+  metricsInterval = setInterval(updateMetrics, 5000)
 })
 
 onUnmounted(() => {
-  stopAutoRefresh()
+  if (metricsInterval) {
+    clearInterval(metricsInterval)
+  }
 })
 </script>
 
-<style lang="scss" scoped>
-.monitoring {
-  padding: 24px;
-  
-  .status-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-bottom: 24px;
-    
-    .status-card {
-      background: var(--bg-white);
-      border: 1px solid var(--border-light);
-      border-radius: 12px;
-      padding: 20px;
-      
-      .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-        
-        .card-title {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-weight: 500;
-          color: var(--text-primary);
-        }
-        
-        .load-value,
-        .user-count,
-        .response-time {
-          font-size: 18px;
-          font-weight: 600;
-          color: var(--text-primary);
-        }
-      }
-      
-      .card-content {
-        .status-item {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 8px;
-          
-          .label {
-            color: var(--text-secondary);
-            font-size: 14px;
-          }
-          
-          .value {
-            color: var(--text-primary);
-            font-weight: 500;
-          }
-        }
-        
-        .load-description {
-          text-align: center;
-          margin-top: 8px;
-          font-size: 12px;
-          color: var(--text-placeholder);
-        }
-        
-        .chart-placeholder {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          height: 80px;
-          color: var(--text-placeholder);
-          font-size: 12px;
-          
-          span {
-            margin-top: 8px;
-          }
-        }
-      }
-    }
-  }
-  
-  .charts-section {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 24px;
-    margin-bottom: 24px;
-    
-    .chart-container {
-      padding: 24px;
-      
-      .chart-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        
-        h3 {
-          font-size: 16px;
-          font-weight: 600;
-          color: var(--text-primary);
-          margin: 0;
-        }
-      }
-      
-      .chart-content {
-        .chart-placeholder {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          height: 200px;
-          color: var(--text-placeholder);
-          text-align: center;
-          
-          &.large {
-            height: 300px;
-          }
-          
-          span {
-            margin-top: 12px;
-            font-size: 16px;
-          }
-          
-          p {
-            margin-top: 8px;
-            font-size: 12px;
-          }
-        }
-        
-        .success-stats {
-          display: flex;
-          align-items: center;
-          gap: 24px;
-          
-          .stat-item {
-            text-align: center;
-            
-            .stat-circle {
-              width: 80px;
-              height: 80px;
-              border-radius: 50%;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              margin-bottom: 8px;
-              font-size: 18px;
-              font-weight: 600;
-              color: white;
-              
-              &.success {
-                background: var(--success-color);
-              }
-            }
-            
-            .stat-label {
-              font-size: 14px;
-              color: var(--text-secondary);
-            }
-          }
-          
-          .stat-details {
-            flex: 1;
-            
-            .detail-item {
-              display: flex;
-              justify-content: space-between;
-              margin-bottom: 8px;
-              
-              .detail-label {
-                color: var(--text-secondary);
-              }
-              
-              .detail-value {
-                font-weight: 500;
-                
-                &.success {
-                  color: var(--success-color);
-                }
-                
-                &.failed {
-                  color: var(--danger-color);
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  
-  .logs-section {
-    padding: 24px;
-    margin-bottom: 24px;
-    
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      
-      h3 {
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--text-primary);
-        margin: 0;
-      }
-      
-      .log-controls {
-        display: flex;
-        gap: 8px;
-        align-items: center;
-      }
-    }
-    
-    .logs-content {
-      .empty-logs {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 120px;
-        color: var(--text-placeholder);
-        
-        span {
-          margin-top: 8px;
-          font-size: 14px;
-        }
-      }
-      
-      .log-list {
-        max-height: 300px;
-        overflow-y: auto;
-        
-        .log-item {
-          display: grid;
-          grid-template-columns: 160px 80px 1fr;
-          gap: 12px;
-          padding: 8px 0;
-          border-bottom: 1px solid var(--border-light);
-          font-size: 13px;
-          
-          &:last-child {
-            border-bottom: none;
-          }
-          
-          .log-time {
-            color: var(--text-placeholder);
-            font-family: monospace;
-          }
-          
-          .log-message {
-            color: var(--text-regular);
-          }
-        }
-      }
-      
-      .logs-pagination {
-        display: flex;
-        justify-content: center;
-        margin-top: 16px;
-      }
-    }
-  }
-  
-  .metrics-section {
-    padding: 24px;
-    
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      
-      h3 {
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--text-primary);
-        margin: 0;
-      }
-    }
-    
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 24px;
-      
-      .metric-item {
-        text-align: center;
-        
-        .metric-label {
-          font-size: 14px;
-          color: var(--text-secondary);
-          margin-bottom: 12px;
-        }
-        
-        .metric-value {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 8px;
-          
-          .metric-text {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-          }
-        }
-      }
-    }
-  }
+<style scoped>
+.monitoring-container {
+  padding: 20px;
 }
 
-@media (max-width: 1024px) {
-  .monitoring {
-    .charts-section {
-      grid-template-columns: 1fr;
-    }
-  }
+.page-header {
+  margin-bottom: 20px;
 }
 
-@media (max-width: 768px) {
-  .monitoring {
-    padding: 16px;
-    
-    .status-cards {
-      grid-template-columns: 1fr;
-    }
-    
-    .section-header {
-      flex-direction: column;
-      gap: 12px;
-      align-items: flex-start;
-    }
-    
-    .log-item {
-      grid-template-columns: 1fr;
-      gap: 4px;
-    }
-    
-    .metrics-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
+.page-header h1 {
+  margin: 0;
+  color: #303133;
+}
+
+.page-header p {
+  margin: 5px 0 0 0;
+  color: #909399;
+}
+
+.status-overview {
+  margin-bottom: 20px;
+}
+
+.status-card {
+  height: 120px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.status-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  font-size: 24px;
+  color: white;
+  background: #909399;
+}
+
+.status-icon.status-healthy {
+  background: #67c23a;
+}
+
+.status-icon.cpu {
+  background: #409eff;
+}
+
+.status-icon.memory {
+  background: #e6a23c;
+}
+
+.status-icon.disk {
+  background: #f56c6c;
+}
+
+.status-info h3 {
+  margin: 0 0 5px 0;
+  font-size: 16px;
+  color: #303133;
+}
+
+.status-info p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.text-success {
+  color: #67c23a;
+}
+
+.text-danger {
+  color: #f56c6c;
+}
+
+.charts-section {
+  margin-bottom: 20px;
+}
+
+.chart-container {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f7fa;
+  color: #909399;
+}
+
+.logs-section {
+  margin-bottom: 20px;
+}
+
+.logs-container {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.no-data {
+  text-align: center;
+  color: #909399;
+  padding: 40px;
+}
+
+.log-list {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+.log-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+}
+
+.log-time {
+  width: 150px;
+  color: #909399;
+  flex-shrink: 0;
+}
+
+.log-level {
+  width: 80px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.log-message {
+  flex: 1;
+}
+
+.log-info .log-level {
+  color: #409eff;
+}
+
+.log-warning .log-level {
+  color: #e6a23c;
+}
+
+.log-error .log-level {
+  color: #f56c6c;
+}
+
+.services-section {
+  margin-bottom: 20px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>

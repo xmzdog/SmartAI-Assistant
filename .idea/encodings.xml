@@ -7,6 +7,8 @@
     <file url="file://$PROJECT_DIR$/dev-fetch-app/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dev-fetch-damain/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dev-fetch-damain/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dev-fetch-infrastructure/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dev-fetch-infrastructure/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dev-fetch-trigger/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dev-fetch-trigger/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/dev-fetch-types/src/main/java" charset="UTF-8" />

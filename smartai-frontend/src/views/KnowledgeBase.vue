@@ -243,11 +243,12 @@ const uploadFiles = async () => {
   
   try {
     const formData = new FormData()
-    formData.append('ragTag', uploadForm.ragTag.trim())
+    formData.append('name', uploadForm.ragTag.trim())
+    formData.append('tag', uploadForm.ragTag.trim())
     
     // 添加多个文件
     uploadForm.files.forEach(file => {
-      formData.append('file', file.raw)
+      formData.append('files', file.raw)
     })
 
     console.log('准备上传文件:', {

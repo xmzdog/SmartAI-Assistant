@@ -2,4 +2,4 @@ spring:
   application:
     name: SmartAI-Assistant
   profiles:
-    active: local
+    active: dev

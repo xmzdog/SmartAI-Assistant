@@ -1,0 +1,1 @@
+package com.onepiece.infrastructure.gateway.dto;

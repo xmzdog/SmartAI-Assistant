@@ -8,16 +8,16 @@ export const knowledgeBaseApi = {
    * @returns {Promise} 知识库列表
    */
   getKnowledgeBaseList() {
-    return request.get('/v1/rag/query_rag_tag_list')
+    return request.post('/v1/ai/admin/rag/queryAllValidRagOrder')
   },
 
   /**
    * 上传文件到知识库
-   * @param {FormData} formData - 包含ragTag和file的表单数据
+   * @param {FormData} formData - 包含name、tag和files的表单数据
    * @returns {Promise} 上传结果
    */
   uploadFiles(formData) {
-    return request.post('/v1/rag/file/upload', formData, {
+    return request.post('/v1/ai/agent/file/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

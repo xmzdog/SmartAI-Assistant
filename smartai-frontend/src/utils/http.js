@@ -41,13 +41,21 @@ http.interceptors.response.use(
     
     const { data } = response
     
-    // 检查业务状态码
-    if (data.code === '0000') {
+    // 如果是数组，直接返回（兼容后端直接返回数组的情况）
+    if (Array.isArray(data)) {
       return response
-    } else {
+    }
+    
+    // 检查业务状态码（用于包装响应的情况）
+    if (data && typeof data === 'object' && data.code === '0000') {
+      return response
+    } else if (data && typeof data === 'object' && data.code && data.code !== '0000') {
       ElMessage.error(data.info || '请求失败')
       return Promise.reject(new Error(data.info || '请求失败'))
     }
+    
+    // 其他情况直接返回（如简单的字符串、数字等）
+    return response
   },
   (error) => {
     NProgress.done()

@@ -1,0 +1,1 @@
+package com.onepiece.domain.yyy.adapter.repository;
