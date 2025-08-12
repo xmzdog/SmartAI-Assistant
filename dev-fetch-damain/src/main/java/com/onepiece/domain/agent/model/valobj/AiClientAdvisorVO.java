@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 /**
  * Ai 客户端顾问模型对象
  *
- * @author Fuzhengwei bugstack.cn @小傅哥
+ *  
  * 2025-05-04 08:49
  */
 @Data

@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * RAG 知识库服务接口
- * @author Fuzhengwei bugstack.cn @小傅哥
+ *  
  * 2025-05-05 16:40
  */
 public interface IAiAgentRagService {

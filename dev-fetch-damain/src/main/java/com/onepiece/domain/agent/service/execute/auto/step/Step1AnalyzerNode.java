@@ -8,6 +8,7 @@ import com.onepiece.domain.agent.service.execute.auto.step.factory.DefaultAutoAg
 import cn.bugstack.wrench.design.framework.tree.StrategyHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.stereotype.Service;
 
 /**
@@ -37,7 +38,8 @@ public class Step1AnalyzerNode extends AbstractExecuteSupport {
                 dynamicContext.getCurrentTask()
         );
 
-        ChatClient chatClient = getChatClientByClientId(aiAgentClientFlowConfigVO.getClientId());
+        // 直接使用预热好的模型创建ChatClient
+        ChatClient chatClient = createChatClientFromModel();
 
         String analysisResult = chatClient
                 .prompt(analysisPrompt)
@@ -164,6 +166,25 @@ public class Step1AnalyzerNode extends AbstractExecuteSupport {
             AutoAgentExecuteResultEntity result = AutoAgentExecuteResultEntity.createAnalysisSubResult(
                     dynamicContext.getStep(), subType, content, sessionId);
             sendSseResult(dynamicContext, result);
+        }
+    }
+    
+    /**
+     * 直接使用预热好的模型创建ChatClient
+     */
+    private ChatClient createChatClientFromModel() {
+        // 使用预热好的模型ID 2
+        Long modelId = 2L;
+        String modelBeanName = "AiClientModel_" + modelId;
+        
+        try {
+            OpenAiChatModel chatModel = getBean(modelBeanName);
+            return ChatClient.builder(chatModel)
+                    .defaultSystem("AI 智能体")
+                    .build();
+        } catch (Exception e) {
+            log.error("创建ChatClient失败，模型Bean: {}", modelBeanName, e);
+            throw new RuntimeException("无法创建ChatClient，模型不可用: " + modelBeanName, e);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.onepiece.domain.agent.service.armory.factory;
 
 import com.onepiece.domain.agent.model.entity.AiAgentEngineStarterEntity;
+import com.onepiece.domain.agent.model.entity.ArmoryCommandEntity;
 import com.onepiece.domain.agent.service.armory.node.RootNode;
 import cn.bugstack.wrench.design.framework.tree.StrategyHandler;
 import jakarta.annotation.Resource;
@@ -19,7 +20,7 @@ import java.util.Map;
 /**
  * 工厂类
  *
- * @author Fuzhengwei bugstack.cn @小傅哥
+ *  
  * 2025-05-02 13:24
  */
 @Service
@@ -29,6 +30,10 @@ public class DefaultArmoryStrategyFactory {
     private ApplicationContext applicationContext;
 
     private final RootNode rootNode;
+
+//    public StrategyHandler<ArmoryCommandEntity, DefaultArmoryStrategyFactory.DynamicContext, String> armoryStrategyHandler(){
+//        return rootNode;
+//    }
 
     public DefaultArmoryStrategyFactory(RootNode rootNode) {
         this.rootNode = rootNode;

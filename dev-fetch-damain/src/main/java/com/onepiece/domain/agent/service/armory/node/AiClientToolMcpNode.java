@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * Tool MCP Node
  *
- * @author Fuzhengwei bugstack.cn @小傅哥
+ *  
  * 2025-05-02 19:04
  */
 @Slf4j

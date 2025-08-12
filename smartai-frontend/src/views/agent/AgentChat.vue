@@ -946,11 +946,17 @@ const sendAutoAgentMessage = async (message, assistantMessage) => {
       params,
       // onMessage callback
       (data) => {
-        const content = data.content || data.message || ''
-        if (content) {
-          assistantMessage.content += content
-          assistantMessage.isStreaming = true
-          scrollToBottom()
+        if (data.type) {
+          // 处理结构化的SSE数据
+          handleStructuredResponse(data, assistantMessage)
+        } else {
+          // 处理普通文本消息
+          const content = data.content || data.message || ''
+          if (content) {
+            assistantMessage.content += content
+            assistantMessage.isStreaming = true
+            scrollToBottom()
+          }
         }
       },
       // onError callback
@@ -972,6 +978,147 @@ const sendAutoAgentMessage = async (message, assistantMessage) => {
     assistantMessage.content = '抱歉，AutoAgent调用失败，请稍后重试。'
     assistantMessage.isStreaming = false
   }
+}
+
+// 处理结构化的SSE响应
+const handleStructuredResponse = (data, assistantMessage) => {
+  const { type, subType, step, content, completed } = data
+  
+  // 添加调试日志
+  console.log('收到SSE数据:', { type, subType, step, content, completed })
+  
+  if (type === 'complete') {
+    assistantMessage.isStreaming = false
+    console.log('AutoAgent执行完成')
+    return
+  }
+  
+  if (type === 'error') {
+    assistantMessage.content += `\n❌ **错误**: ${content}\n`
+    assistantMessage.isStreaming = false
+    scrollToBottom()
+    return
+  }
+  
+  // 根据类型和子类型格式化输出
+  let formattedContent = ''
+  
+  switch (type) {
+    case 'analysis':
+      if (step) {
+        formattedContent += `\n🎯 **第 ${step} 步 - 任务分析**\n`
+      }
+      if (subType) {
+        switch (subType) {
+          case 'analysis_status':
+            formattedContent += `📊 **任务状态分析:**\n${content}\n`
+            break
+          case 'analysis_history':
+            formattedContent += `📚 **执行历史评估:**\n${content}\n`
+            break
+          case 'analysis_strategy':
+            formattedContent += `🎯 **下一步策略:**\n${content}\n`
+            break
+          case 'analysis_progress':
+            formattedContent += `📈 **完成度评估:**\n${content}\n`
+            break
+          default:
+            formattedContent += `${content}\n`
+        }
+      } else {
+        formattedContent += `${content}\n`
+      }
+      break
+      
+    case 'execution':
+      if (step) {
+        formattedContent += `\n⚡ **第 ${step} 步 - 精准执行**\n`
+      }
+      if (subType) {
+        switch (subType) {
+          case 'execution_target':
+            formattedContent += `🎯 **执行目标:**\n${content}\n`
+            break
+          case 'execution_process':
+            formattedContent += `⚙️ **执行过程:**\n${content}\n`
+            break
+          case 'execution_result':
+            formattedContent += `📊 **执行结果:**\n${content}\n`
+            break
+          case 'execution_quality':
+            formattedContent += `✅ **质量检查:**\n${content}\n`
+            break
+          default:
+            formattedContent += `${content}\n`
+        }
+      } else {
+        formattedContent += `${content}\n`
+      }
+      break
+      
+    case 'supervision':
+      if (step) {
+        formattedContent += `\n🔍 **第 ${step} 步 - 质量监督**\n`
+      }
+      if (subType) {
+        switch (subType) {
+          case 'supervision_assessment':
+            formattedContent += `📋 **质量评估:**\n${content}\n`
+            break
+          case 'supervision_issues':
+            formattedContent += `⚠️ **问题识别:**\n${content}\n`
+            break
+          case 'supervision_suggestions':
+            formattedContent += `💡 **改进建议:**\n${content}\n`
+            break
+          case 'supervision_score':
+            formattedContent += `⭐ **质量评分:**\n${content}\n`
+            break
+          default:
+            formattedContent += `${content}\n`
+        }
+      } else {
+        formattedContent += `${content}\n`
+      }
+      break
+      
+    case 'summary':
+      formattedContent += `\n📝 **执行总结**\n`
+      if (subType) {
+        switch (subType) {
+          case 'execution_summary':
+            formattedContent += `📊 **执行摘要:**\n${content}\n`
+            break
+          case 'key_achievements':
+            formattedContent += `🏆 **关键成就:**\n${content}\n`
+            break
+          case 'suggestions':
+            formattedContent += `💡 **建议:**\n${content}\n`
+            break
+          case 'evaluation':
+            formattedContent += `📈 **评估:**\n${content}\n`
+            break
+          default:
+            formattedContent += `${content}\n`
+        }
+      } else {
+        formattedContent += `${content}\n`
+      }
+      break
+      
+    default:
+      formattedContent = content
+  }
+  
+  assistantMessage.content += formattedContent
+  assistantMessage.isStreaming = !completed
+  
+  // 强制触发Vue的响应式更新
+  nextTick(() => {
+    scrollToBottom()
+  })
+  
+  console.log('更新消息内容，当前长度:', assistantMessage.content.length, '流式状态:', assistantMessage.isStreaming)
 }
 
 const askQuestion = (question) => {
@@ -1255,6 +1402,30 @@ const renderMarkdown = (content) => {
 </script>
 
 <style scoped>
+/* 重写全局样式，仅对此页面生效 */
+.page-container {
+  padding: 0px 0px 20px 0px !important;
+  margin: 0 !important;
+  min-height: calc(100vh - 0px) !important;
+}
+
+/* 确保页面内容区域没有额外的边距 */
+.page-content {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* 重写可能的全局容器样式 */
+.main-content {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.content-wrapper {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 .agent-chat-page {
   height: 100%;
   display: flex;
@@ -1262,26 +1433,43 @@ const renderMarkdown = (content) => {
   background: #f5f5f5;
   overflow: hidden;
   position: relative;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box;
+}
+
+/* 确保所有子元素都不受外部20px边距影响 */
+.agent-chat-page * {
+  box-sizing: border-box;
+}
+
+/* 重置可能的外部边距影响 */
+.agent-chat-page .el-container,
+.agent-chat-page .el-main,
+.agent-chat-page .el-header,
+.agent-chat-page .el-aside,
+.agent-chat-page .el-footer {
+  padding: 0 !important;
 }
 
 /* 页面标题栏 */
 .page-header {
-  background: #fff;
-  padding: 10px 24px 16px;
-  border-bottom: 1px solid #e8e8e8;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  background:#f5f5f5;
+  padding: 4px 4px 0px;
+  margin-bottom: 0px !important;
+
 }
 
 .page-title {
   margin: 0;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   color: #1a1a1a;
   line-height: 1.0;
 }
 
 .page-subtitle {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
   color: #666;
   margin-left: 8px;
@@ -1291,14 +1479,14 @@ const renderMarkdown = (content) => {
 .top-config-bar {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border-radius: 12px;
-  margin: 0px 20px 0 0px;
-  padding: 6px 4px;
+  border-radius: 6px;
+  margin: 2px 4px 0 4px;
+  padding: 4px 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  min-height: 70px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  min-height: 40px;
 }
 
 .config-left .page-title {
@@ -1311,35 +1499,34 @@ const renderMarkdown = (content) => {
 .config-center {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
 }
 
 .config-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .config-item label {
   font-weight: 500;
   color: #666;
-  font-size: 14px;
+  font-size: 13px;
   white-space: nowrap;
 }
 
 .config-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .chat-container {
   flex: 1;
   display: flex;
-  gap: 20px;
+  gap: 8px;
   overflow: hidden;
-  margin: 20px;
-  margin-top: 20px;
+  margin: 4px 4px 40px 4px;
   min-height: 0;
 }
 
@@ -1360,7 +1547,7 @@ const renderMarkdown = (content) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
+  padding: 8px 12px;
   border-bottom: 1px solid #f0f0f0;
 }
 
@@ -1374,7 +1561,7 @@ const renderMarkdown = (content) => {
 .history-content {
   flex: 1;
   overflow-y: auto;
-  padding: 16px;
+  padding: 8px 12px;
   min-height: 0;
 }
 
@@ -1523,7 +1710,7 @@ const renderMarkdown = (content) => {
 
 .empty-state {
   text-align: center;
-  padding: 40px 20px;
+  padding: 30px 12px;
   color: var(--text-secondary);
 }
 
@@ -1534,7 +1721,7 @@ const renderMarkdown = (content) => {
 }
 
 .panel-footer {
-  padding: 20px;
+  padding: 12px;
   border-top: 1px solid var(--border-light);
   display: flex;
   flex-direction: column;
@@ -1562,13 +1749,14 @@ const renderMarkdown = (content) => {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   min-height: 0;
   max-height: 100%;
+  margin-bottom: 20px;
 }
 
 .chat-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--border-light);
 }
 
@@ -1594,20 +1782,20 @@ const renderMarkdown = (content) => {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 20px;
+  padding: 12px;
   min-height: 0;
 }
 
 .welcome-message {
   text-align: center;
-  padding: 60px 20px;
+  padding: 30px 12px;
   color: var(--text-secondary);
 }
 
 .welcome-icon {
   font-size: 64px;
   color: var(--primary-color);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .welcome-message h3 {
@@ -1829,7 +2017,7 @@ const renderMarkdown = (content) => {
 
 /* 输入区域 */
 .input-area {
-  padding: 20px;
+  padding: 12px;
   border-top: 1px solid var(--border-light);
 }
 
@@ -1866,7 +2054,7 @@ const renderMarkdown = (content) => {
 /* 空状态样式 */
 .empty-state {
   text-align: center;
-  padding: 30px 20px;
+  padding: 30px 12px;
   color: #999;
 }
 
@@ -1885,9 +2073,9 @@ const renderMarkdown = (content) => {
 @media (max-width: 768px) {
   .top-config-bar {
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     min-height: auto;
-    padding: 16px;
+    padding: 12px;
   }
   
   .config-center {

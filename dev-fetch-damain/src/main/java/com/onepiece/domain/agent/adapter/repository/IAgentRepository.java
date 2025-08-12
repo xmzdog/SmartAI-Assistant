@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * 仓储服务
- * @author Fuzhengwei bugstack.cn @小傅哥
+ *  
  * 2025-05-02 14:15
  */
 public interface IAgentRepository {

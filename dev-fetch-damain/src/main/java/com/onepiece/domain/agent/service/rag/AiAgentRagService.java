@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * RAG 知识库服务
  *
- * @author Fuzhengwei bugstack.cn @小傅哥
+ *  
  * 2025-05-05 16:41
  */
 @Slf4j

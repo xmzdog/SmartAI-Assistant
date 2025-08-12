@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * Ai 客户端模型值对象
- * @author Fuzhengwei bugstack.cn @小傅哥
+ *  
  * 2025-05-02 14:19
  */
 @Data

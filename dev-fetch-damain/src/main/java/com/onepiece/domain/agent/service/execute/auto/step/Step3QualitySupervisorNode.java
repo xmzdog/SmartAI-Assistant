@@ -8,6 +8,7 @@ import com.onepiece.domain.agent.service.execute.auto.step.factory.DefaultAutoAg
 import cn.bugstack.wrench.design.framework.tree.StrategyHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.stereotype.Service;
 
 /**
@@ -37,7 +38,8 @@ public class Step3QualitySupervisorNode extends AbstractExecuteSupport {
         String supervisionPrompt = String.format(aiAgentClientFlowConfigVO.getStepPrompt(), requestParameter.getMessage(), executionResult);
 
         // 获取对话客户端
-        ChatClient chatClient = getChatClientByClientId(aiAgentClientFlowConfigVO.getClientId());
+        // 直接使用预热好的模型创建ChatClient
+        ChatClient chatClient = createChatClientFromModel();
 
         String supervisionResult = chatClient
                 .prompt(supervisionPrompt)
@@ -77,8 +79,7 @@ public class Step3QualitySupervisorNode extends AbstractExecuteSupport {
         
         dynamicContext.getExecutionHistory().append(stepSummary);
         
-        // 增加步骤计数
-        dynamicContext.setStep(dynamicContext.getStep() + 1);
+        // 步骤递增逻辑移到Step1AnalyzerNode的get方法中处理
         
         // 如果任务已完成或达到最大步数，进入总结阶段
         if (dynamicContext.isCompleted() || dynamicContext.getStep() > dynamicContext.getMaxStep()) {
@@ -88,6 +89,25 @@ public class Step3QualitySupervisorNode extends AbstractExecuteSupport {
         // 否则继续下一轮执行，返回到Step1AnalyzerNode
         return router(requestParameter, dynamicContext);
     }
+    
+    /**
+     * 直接使用预热好的模型创建ChatClient
+     */
+    private ChatClient createChatClientFromModel() {
+        // 使用预热好的模型ID 2
+        Long modelId = 2L;
+        String modelBeanName = "AiClientModel_" + modelId;
+        
+        try {
+            OpenAiChatModel chatModel = getBean(modelBeanName);
+            return ChatClient.builder(chatModel)
+                    .defaultSystem("AI 智能体")
+                    .build();
+        } catch (Exception e) {
+            log.error("创建ChatClient失败，模型Bean: {}", modelBeanName, e);
+            throw new RuntimeException("无法创建ChatClient，模型不可用: " + modelBeanName, e);
+        }
+    }
 
     @Override
     public StrategyHandler<ExecuteCommandEntity, DefaultAutoAgentExecuteStrategyFactory.DynamicContext, String> get(ExecuteCommandEntity requestParameter, DefaultAutoAgentExecuteStrategyFactory.DynamicContext dynamicContext) throws Exception {
@@ -95,6 +115,9 @@ public class Step3QualitySupervisorNode extends AbstractExecuteSupport {
         if (dynamicContext.isCompleted() || dynamicContext.getStep() > dynamicContext.getMaxStep()) {
             return getBean("step4LogExecutionSummaryNode");
         }
+        
+        // 增加步骤计数，为下一轮执行做准备
+        dynamicContext.setStep(dynamicContext.getStep() + 1);
         
         // 否则返回到Step1AnalyzerNode进行下一轮分析
         return getBean("step1AnalyzerNode");

@@ -46,7 +46,7 @@ public class AiSearchMCPTest {
                         .build())
                 .build();
 
-        ChatResponse call = chatModel.call(Prompt.builder().messages(new UserMessage("搜索小傅哥技术博客有哪些项目")).build());
+        ChatResponse call = chatModel.call(Prompt.builder().messages(new UserMessage("搜索xfg技术博客有哪些项目")).build());
         log.info("测试结果:{}", JSON.toJSONString(call.getResult()));
     }
 

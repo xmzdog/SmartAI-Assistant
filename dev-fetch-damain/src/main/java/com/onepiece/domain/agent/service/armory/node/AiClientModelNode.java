@@ -6,22 +6,19 @@ import com.onepiece.domain.agent.service.armory.AbstractArmorySupport;
 import com.onepiece.domain.agent.service.armory.factory.DefaultArmoryStrategyFactory;
 import cn.bugstack.wrench.design.framework.tree.StrategyHandler;
 import com.alibaba.fastjson.JSON;
-import io.modelcontextprotocol.client.McpSyncClient;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * AI客户端模型
  *
- * @author Fuzhengwei bugstack.cn @小傅哥
+ *  
  * 2025-05-02 14:25
  */
 @Slf4j
@@ -78,22 +75,12 @@ public class AiClientModelNode extends AbstractArmorySupport {
                 .embeddingsPath(modelVO.getEmbeddingsPath())
                 .build();
 
-        List<McpSyncClient> mcpSyncClients = new ArrayList<>();
-        List<AiClientModelVO.AIClientModelToolConfigVO> toolConfigs = modelVO.getAiClientModelToolConfigs();
-        if (null != toolConfigs && !toolConfigs.isEmpty()) {
-            for (AiClientModelVO.AIClientModelToolConfigVO toolConfig : toolConfigs) {
-                Long toolId = toolConfig.getToolId();
-                McpSyncClient mcpSyncClient = getBean("AiClientToolMcp_" + toolId);
-                mcpSyncClients.add(mcpSyncClient);
-            }
-        }
-
-        // 构建OpenAiChatModel
+        // 构建OpenAiChatModel - 不在这里处理MCP工具依赖
+        // MCP工具的组装应该在AiClientNode中进行
         return OpenAiChatModel.builder()
                 .openAiApi(openAiApi)
                 .defaultOptions(OpenAiChatOptions.builder()
                         .model(modelVO.getModelVersion())
-                        .toolCallbacks(new SyncMcpToolCallbackProvider(mcpSyncClients).getToolCallbacks())
                         .build())
                 .build();
     }

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Ai 对话客户端
  *
- * @author Fuzhengwei bugstack.cn @小傅哥
+ *  
  * 2025-05-04 20:08
  */
 @Data

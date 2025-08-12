@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * ai 客户端对话对象节点
  *
- * @author Fuzhengwei bugstack.cn @小傅哥
+ *  
  * 2025-05-04 20:16
  */
 @Slf4j

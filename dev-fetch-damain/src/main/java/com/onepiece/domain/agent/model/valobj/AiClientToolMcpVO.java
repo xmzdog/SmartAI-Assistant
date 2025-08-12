@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * MCP VO 对象
  *
- * @author Fuzhengwei bugstack.cn @小傅哥
+ *  
  * 2025-05-02 19:11
  */
 @Data
