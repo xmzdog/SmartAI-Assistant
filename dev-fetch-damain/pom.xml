@@ -89,6 +89,8 @@
             <groupId>com.onepiece</groupId>
             <artifactId>dev-fetch-types</artifactId>
         </dependency>
+
+
     </dependencies>
 
 </project>

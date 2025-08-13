@@ -26,6 +26,13 @@ public class Step3QualitySupervisorNode extends AbstractExecuteSupport {
         // 第三阶段：质量监督
         log.info("\n🔍 阶段3: 质量监督检查");
         
+        // 立即发送监督开始的通知
+        AutoAgentExecuteResultEntity supervisionStartResult = AutoAgentExecuteResultEntity.createSupervisionSubResult(
+                dynamicContext.getStep(), "supervision_start", 
+                "开始质量监督检查...", 
+                requestParameter.getSessionId());
+        sendSseResult(dynamicContext, supervisionStartResult);
+        
         // 从动态上下文中获取执行结果
         String executionResult = dynamicContext.getValue("executionResult");
         if (executionResult == null || executionResult.trim().isEmpty()) {
@@ -37,9 +44,8 @@ public class Step3QualitySupervisorNode extends AbstractExecuteSupport {
         
         String supervisionPrompt = String.format(aiAgentClientFlowConfigVO.getStepPrompt(), requestParameter.getMessage(), executionResult);
 
-        // 获取对话客户端
-        // 直接使用预热好的模型创建ChatClient
-        ChatClient chatClient = createChatClientFromModel();
+        // 使用智能体配置的客户端创建ChatClient
+        ChatClient chatClient = createChatClientFromConfig(dynamicContext);
 
         String supervisionResult = chatClient
                 .prompt(supervisionPrompt)
@@ -91,22 +97,26 @@ public class Step3QualitySupervisorNode extends AbstractExecuteSupport {
     }
     
     /**
-     * 直接使用预热好的模型创建ChatClient
+     * 使用预热好的模型创建ChatClient
      */
-    private ChatClient createChatClientFromModel() {
-        // 使用预热好的模型ID 2
-        Long modelId = 2L;
-        String modelBeanName = "AiClientModel_" + modelId;
+    private ChatClient createChatClientFromConfig(DefaultAutoAgentExecuteStrategyFactory.DynamicContext dynamicContext) {
+        // 直接使用预热好的模型，按优先级尝试
+        Long[] modelIds = {3L,2L, 1L}; // 按优先级排序
         
-        try {
-            OpenAiChatModel chatModel = getBean(modelBeanName);
-            return ChatClient.builder(chatModel)
-                    .defaultSystem("AI 智能体")
-                    .build();
-        } catch (Exception e) {
-            log.error("创建ChatClient失败，模型Bean: {}", modelBeanName, e);
-            throw new RuntimeException("无法创建ChatClient，模型不可用: " + modelBeanName, e);
+        for (Long modelId : modelIds) {
+            String modelBeanName = "AiClientModel_" + modelId;
+            try {
+                OpenAiChatModel chatModel = getBean(modelBeanName);
+                log.info("成功使用预热好的模型Bean: {}", modelBeanName);
+                return ChatClient.builder(chatModel)
+                        .defaultSystem("AI 智能体")
+                        .build();
+            } catch (Exception e) {
+                log.warn("模型Bean {} 不可用，尝试下一个: {}", modelBeanName, e.getMessage());
+            }
         }
+        
+        throw new RuntimeException("无法创建ChatClient，所有预热模型都不可用。请检查智能体预热状态。");
     }
 
     @Override

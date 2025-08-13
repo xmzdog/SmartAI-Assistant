@@ -153,7 +153,6 @@ const isCollapsed = ref(false)
 // 路由配置
 const routes = [
   { path: 'dashboard', meta: { title: '仪表板', icon: 'Dashboard' } },
-  { path: 'chat', meta: { title: '智能对话', icon: 'ChatLineSquare' } },
   { path: 'agent', meta: { title: '智能体列表', icon: 'User' } },
   { path: 'agent/chat', meta: { title: 'Agent对话', icon: 'ChatLineSquare' } },
   { path: 'model', meta: { title: '模型管理', icon: 'Cpu' } },
@@ -164,7 +163,8 @@ const routes = [
     children: [
       { path: 'prompt', meta: { title: '系统提示词' } },
       { path: 'advisor', meta: { title: '顾问配置' } },
-      { path: 'tools', meta: { title: 'MCP工具' } }
+      { path: 'tools', meta: { title: 'MCP工具' } },
+      { path: 'flow-config', meta: { title: '流程配置' } }
     ]
   },
   { path: 'task', meta: { title: '任务调度', icon: 'Timer' } },

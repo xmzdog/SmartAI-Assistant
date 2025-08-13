@@ -44,12 +44,51 @@
         WHERE id = #{id}
     </select>
 
+    <!-- 原有：按 AgentId 查询（返回实体，供仓储内部使用） -->
     <select id="queryByAgentId" parameterType="java.lang.String" resultMap="AiAgentFlowConfigMap">
         SELECT id, agent_id, client_id, client_name, client_type, sequence, step_prompt, create_time
         FROM ai_agent_flow_config
         WHERE agent_id = #{agentId}
         ORDER BY sequence ASC
     </select>
+
+    <!-- 新增：按 AgentId 关联查询模型名称（供管理端页面使用） -->
+    <select id="queryByAgentIdWithModelName" parameterType="java.lang.String" resultType="java.util.HashMap">
+        SELECT 
+          f.id,
+          f.agent_id       AS agentId,
+          f.client_id      AS clientId,
+          f.client_name    AS clientName,
+          COALESCE(m.model_name, '未配置模型') AS modelName,
+          f.client_type    AS clientType,
+          f.sequence       AS sequence,
+          f.step_prompt    AS stepPrompt,
+          f.create_time    AS createTime
+        FROM ai_agent_flow_config f
+        LEFT JOIN ai_client_model_config cm ON cm.client_id = CAST(f.client_id AS UNSIGNED)
+        LEFT JOIN ai_client_model m ON m.id = cm.model_id
+        WHERE f.agent_id = #{agentId}
+        ORDER BY f.sequence ASC
+    </select>
+
+    <!-- 新增：查询全部并带出模型名称（管理端全量列表） -->
+    <select id="queryAllWithModelName" resultType="java.util.HashMap">
+        SELECT
+            f.id,
+            f.agent_id       AS agentId,
+            f.client_id      AS clientId,
+            f.client_name    AS clientName,
+            m.agent_name AS modelName,
+            f.client_type    AS clientType,
+            f.sequence       AS sequence,
+            f.step_prompt    AS stepPrompt,
+            f.create_time    AS createTime
+        FROM ai_agent_flow_config f
+                 LEFT JOIN ai_agent m ON m.id = f.agent_id
+        ORDER BY f.agent_id ASC, f.sequence ASC
+    </select>
+
+
 
     <select id="queryByClientId" parameterType="java.lang.String" resultMap="AiAgentFlowConfigMap">
         SELECT id, agent_id, client_id, client_name, client_type, sequence, step_prompt, create_time

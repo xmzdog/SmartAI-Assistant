@@ -84,7 +84,7 @@ public class AiClientNode extends AbstractArmorySupport {
 
     @Override
     protected String beanName(Long id) {
-        return "ChatClient_" + id;
+        return "ai_client_" + id;
     }
 
 }

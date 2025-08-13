@@ -34,6 +34,7 @@ export const agentApi = {
 
  // AutoAgent流式执行接口 (使用fetch处理SSE)
   autoAgentStream(params, onMessage, onError, onComplete) {
+    console.log('=== 开始AutoAgent流式请求 ===', params)
     return new Promise((resolve, reject) => {
       fetch('/api/v1/ai/agent/auto_agent', {
         method: 'POST',
@@ -46,6 +47,7 @@ export const agentApi = {
         body: JSON.stringify(params)
       })
       .then(response => {
+        console.log('=== 收到HTTP响应 ===', response.status, response.headers.get('content-type'))
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`)
         }
@@ -57,31 +59,37 @@ export const agentApi = {
         function readStream() {
           return reader.read().then(({ done, value }) => {
             if (done) {
+              console.log('SSE流结束')
               onComplete && onComplete()
               resolve()
               return
             }
 
             buffer += decoder.decode(value, { stream: true })
+            console.log('收到SSE原始数据:', buffer)
+            
             const lines = buffer.split('\n')
             buffer = lines.pop()// 保留不完整的行
 
             lines.forEach(line => {
               if (line.trim()) {
+                console.log('处理SSE行:', line)
                 try {
                  // 处理SSE格式: data: {...}
                   if (line.startsWith('data: ')) {
                     const jsonStr = line.slice(6)// 移除 "data: "
                     if (jsonStr.trim()) {
                       const data = JSON.parse(jsonStr)
+                      console.log('解析到SSE数据:', data)
                       onMessage && onMessage(data)
                     }
                   } else {
                    // 处理非JSON格式的消息
+                    console.log('处理非JSON消息:', line)
                     onMessage && onMessage({ content: line })
                   }
                 } catch (error) {
-                  console.error('解析AutoAgent响应失败:', error)
+                  console.error('解析AutoAgent响应失败:', error, '原始行:', line)
                   onMessage && onMessage({ content: line })
                 }
               }

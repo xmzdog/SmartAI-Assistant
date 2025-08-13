@@ -1,0 +1,18 @@
+25-08-13.21:46:57.815 [main            ] INFO  ApiTest                - Starting ApiTest using Java 21.0.8 with PID 53865 (started by xmz in /Applications/Java/2025-project/SmartAI-Assistant/dev-fetch-app)
+25-08-13.21:46:57.815 [main            ] INFO  ApiTest                - The following 1 profile is active: "dev"
+25-08-13.21:46:58.682 [main            ] INFO  PgVectorStore          - Using the vector table name: vector_store_openai. Is empty: false
+25-08-13.21:46:58.684 [main            ] INFO  PgVectorStore          - Initializing PGVectorStore schema for table: vector_store_openai in schema: public
+25-08-13.21:46:58.684 [main            ] INFO  PgVectorStore          - vectorTableValidationsEnabled false
+25-08-13.21:46:58.845 [main            ] INFO  OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+25-08-13.21:46:59.054 [main            ] INFO  ApiTest                - Started ApiTest in 1.398 seconds (process running for 1.715)
+25-08-13.21:46:59.282 [main            ] INFO  HikariDataSource       - MainHikariPool - Starting...
+25-08-13.21:46:59.520 [main            ] INFO  HikariPool             - MainHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@51483337
+25-08-13.21:46:59.521 [main            ] INFO  HikariDataSource       - MainHikariPool - Start completed.
+25-08-13.21:46:59.573 [SpringApplicationShutdownHook] INFO  HikariDataSource       - MainHikariPool - Shutdown initiated...
+25-08-13.21:46:59.588 [SpringApplicationShutdownHook] INFO  HikariDataSource       - MainHikariPool - Shutdown completed.
+25-08-13.21:55:44.010 [main            ] INFO  ApiTest                - Starting ApiTest using Java 21.0.8 with PID 54039 (started by xmz in /Applications/Java/2025-project/SmartAI-Assistant/dev-fetch-app)
+25-08-13.21:55:44.011 [main            ] INFO  ApiTest                - The following 1 profile is active: "dev"
+25-08-13.21:55:45.411 [main            ] INFO  PgVectorStore          - Using the vector table name: vector_store_openai. Is empty: false
+25-08-13.21:55:45.414 [main            ] INFO  PgVectorStore          - Initializing PGVectorStore schema for table: vector_store_openai in schema: public
+25-08-13.21:55:45.414 [main            ] INFO  PgVectorStore          - vectorTableValidationsEnabled false
+25-08-13.21:55:45.805 [main            ] INFO  OptionalValidatorFactoryBean - Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.

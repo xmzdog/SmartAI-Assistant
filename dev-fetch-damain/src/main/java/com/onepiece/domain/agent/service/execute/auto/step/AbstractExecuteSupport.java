@@ -60,7 +60,15 @@ public abstract class AbstractExecuteSupport extends AbstractMultiThreadStrategy
             if (emitter != null) {
                 // 发送SSE格式的数据
                 String sseData = "data: " + JSON.toJSONString(result) + "\n\n";
+                log.info("发送SSE数据: type={}, step={}, subType={}", result.getType(), result.getStep(), result.getSubType());
                 emitter.send(sseData);
+                
+                // 立即刷新缓冲区，确保数据立即发送到客户端
+                try {
+                    Thread.sleep(10); // 短暂延迟确保数据发送
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         } catch (IOException e) {
             log.error("发送SSE结果失败：{}", e.getMessage(), e);

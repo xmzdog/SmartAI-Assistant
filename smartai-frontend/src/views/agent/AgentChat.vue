@@ -5,122 +5,7 @@
              <h1 class="page-title">AutoAgent 智能体 <span class="page-subtitle">基于AI智能体的自动化任务执行，支持知识库检索和提示词模板</span></h1>
     </div>
     
-    <!-- 顶部配置栏 -->
-    <div class="top-config-bar">
-      <div class="config-left">
-        <!-- 这里可以放其他左侧配置项 -->
-      </div>
-      
-      <div class="config-center">
-        <div class="config-item">
-          <label>智能体:</label>
-            <el-select
-              v-model="selectedAgentId"
-            placeholder="请选择智能体"
-            @change="handleAgentChange"
-            size="default"
-            style="width: 180px"
-            >
-              <el-option
-                v-for="agent in agentList"
-                :key="agent.id"
-                :label="agent.agentName"
-                :value="agent.id"
-              />
-            </el-select>
-        </div>
-
-        <div class="config-item">
-          <label>知识库:</label>
-            <el-select
-              v-model="selectedRagId"
-            placeholder="选择知识库"
-            @change="handleKnowledgeBaseChange"
-            size="default"
-            style="width: 180px"
-          >
-            <el-option label="无知识库" value="" />
-              <el-option
-                v-for="rag in ragList"
-                :key="rag.id"
-                :label="rag.name"
-                :value="rag.id"
-              />
-            </el-select>
-        </div>
-
-                 <div class="config-item">
-           <label>提示词:</label>
-           <el-select
-             v-model="selectedPromptTemplate"
-             placeholder="选择提示词模板"
-             @change="handlePromptTemplateChange"
-             size="default"
-             style="width: 180px"
-           >
-             <el-option label="无模板" value="" />
-             <el-option
-               v-for="template in promptTemplates"
-               :key="template.id"
-               :label="template.name"
-               :value="template.id"
-             />
-           </el-select>
-         </div>
-
-         <div class="config-item">
-           <label>最大步数:</label>
-           <el-input-number 
-             v-model="autoAgentConfig.maxStep" 
-             :min="1" 
-             :max="20"
-             size="default"
-             controls-position="right"
-             style="width: 120px"
-           />
-         </div>
-           </div>
-
-      <div class="config-right">
-        <el-button size="default" @click="refreshConfigs" :loading="isRefreshingConfigs" :icon="Refresh">
-          刷新
-            </el-button>
-
-        <el-button size="default" type="primary" @click="startNewChat" :icon="Plus">
-          新建对话
-        </el-button>
-        
-        
-        
-        <el-button size="default" @click="clearChat" :icon="Delete" type="danger" plain>
-          清空对话
-        </el-button>
-        
-        <el-dropdown @command="handleBuildCommand">
-          <el-button size="default" :icon="Tools">
-            构建仓库 <el-icon class="el-icon--right"><ArrowDown /></el-icon>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="buildRepo">构建知识库</el-dropdown-item>
-              <el-dropdown-item command="buildAgent">构建智能体</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-
-        <el-dropdown @command="handleUploadCommand">
-          <el-button size="default" :icon="Upload">
-            上传知识 <el-icon class="el-icon--right"><ArrowDown /></el-icon>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="uploadFiles">上传文件</el-dropdown-item>
-              <el-dropdown-item command="parseGit">解析Git仓库</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div>
-    </div>
+    <!-- 顶部配置栏已移除：仅保留底部输入行的智能体选择 -->
 
     <div class="chat-container">
       <!-- 左侧历史对话面板 -->
@@ -183,11 +68,6 @@
             <template v-if="selectedAgentId">
               <el-icon><Avatar /></el-icon>
               <span>{{ getCurrentAgentName() }}</span>
-              <template v-if="selectedRagId">
-                <span class="separator">•</span>
-                <el-icon><Folder /></el-icon>
-                <span>{{ getCurrentRagName() }}</span>
-              </template>
             </template>
             <template v-else>
               <el-icon><Warning /></el-icon>
@@ -309,6 +189,20 @@
          <div class="input-area">
           
           <div class="input-container">
+                <el-select
+                  v-model="selectedAgentId"
+                  placeholder="请选择智能体"
+                  @change="handleAgentChange"
+                  size="default"
+                  style="width: 180px; margin-right: 8px;"
+                >
+                  <el-option
+                    v-for="agent in agentList"
+                    :key="agent.id"
+                    :label="agent.agentName"
+                    :value="agent.id"
+                  />
+                </el-select>
                 <el-input
                   v-model="messageInput"
                   type="textarea"
@@ -451,7 +345,6 @@ import {
   Upload
 } from '@element-plus/icons-vue'
 import { agentApi } from '@/api/agent'
-import { knowledgeBaseApi } from '@/api/knowledgeBase'
 import { marked } from 'marked'
 
 // 路由
@@ -459,26 +352,15 @@ const route = useRoute()
 
 // 响应式数据
 const agentList = ref([])
-const ragList = ref([])
-const promptTemplates = ref([])
 const selectedAgentId = ref('')
-const selectedRagId = ref('')
-const selectedPromptTemplate = ref('')
 const currentChatId = ref(null)
 const chatList = ref([])
 const currentMessages = ref([])
 const messageInput = ref('')
 const isLoading = ref(false)
-const isRefreshingConfigs = ref(false)
-const showRecordModal = ref(false)
 const qaRecords = ref([])
 const currentChatIndex = ref(-1)
-
- // AutoAgent配置
- const autoAgentConfig = ref({
-   maxStep: 10,
-   sessionId: null
- })
+const autoAgentConfig = ref({ sessionId: null, maxStep: 10 })
 
 // 文件上传相关
 const showUploadModal = ref(false)
@@ -536,22 +418,13 @@ onMounted(() => {
 })
 
 // 监听器
-watch([selectedAgentId, selectedRagId], () => {
+watch([selectedAgentId], () => {
   if (selectedAgentId.value) {
     loadChatHistory()
   }
 })
 
-// 自动保存聊天记录
-watch(currentMessages, (newMessages) => {
-  if (newMessages.length > 0 && currentChatId.value) {
-    // 延迟保存，避免频繁保存
-    clearTimeout(autoSaveTimer.value)
-    autoSaveTimer.value = setTimeout(() => {
-      saveChatRecord()
-    }, 2000)
-  }
-}, { deep: true })
+// 取消自动保存：仅在流式完成时保存
 
 // 自动保存定时器
 const autoSaveTimer = ref(null)
@@ -570,20 +443,7 @@ onBeforeUnmount(() => {
 
 // 方法
 const loadConfigs = async () => {
-  isRefreshingConfigs.value = true
-  try {
-    await Promise.all([
-      loadAgents(),
-      loadKnowledgeBases(),
-      loadPromptTemplates()
-    ])
-  } finally {
-    isRefreshingConfigs.value = false
-  }
-}
-
-const refreshConfigs = () => {
-  loadConfigs()
+  await loadAgents()
 }
 
 const loadAgents = async () => {
@@ -604,46 +464,7 @@ const loadAgents = async () => {
   }
 }
 
-const loadKnowledgeBases = async () => {
-  try {
-    const response = await knowledgeBaseApi.getKnowledgeBaseList()
-    // 直接使用ResponseEntity返回的数据数组
-    if (Array.isArray(response)) {
-      ragList.value = response.filter(ragOrder => ragOrder.status === 1).map(ragOrder => ({
-        id: ragOrder.id,
-        name: ragOrder.ragName,
-        tag: ragOrder.knowledgeTag,
-        description: `知识库: ${ragOrder.ragName}`
-      }))
-    } else if (response && response.code === '0000') {
-      ragList.value = (response.data || []).filter(ragOrder => ragOrder.status === 1).map(ragOrder => ({
-        id: ragOrder.id,
-        name: ragOrder.ragName,
-        tag: ragOrder.knowledgeTag,
-        description: `知识库: ${ragOrder.ragName}`
-      }))
-    } else {
-      ragList.value = []
-    }
-  } catch (error) {
-    console.error('加载知识库失败:', error)
-    ElMessage.error('加载知识库失败')
-  }
-}
-
-const loadPromptTemplates = async () => {
-  try {
-    const response = await agentApi.getPromptTemplates()
-    if (response.code === '0000') {
-      promptTemplates.value = response.data || []
-    } else {
-      promptTemplates.value = []
-    }
-  } catch (error) {
-    console.error('加载提示词模板失败:', error)
-    ElMessage.error('加载提示词模板失败')
-  }
-}
+// 已去除知识库/提示词加载
 
 const selectAgent = (agentId) => {
   if (selectedAgentId.value === agentId) return
@@ -670,26 +491,14 @@ const selectAgent = (agentId) => {
   }
 }
 
-const selectKnowledgeBase = (ragId) => {
-  selectedRagId.value = ragId
-}
-
-const selectPromptTemplate = (templateId) => {
-  selectedPromptTemplate.value = templateId
-}
+// 已去除知识库/提示词选择
 
 // 处理顶部配置栏的事件
 const handleAgentChange = (agentId) => {
   selectAgent(agentId)
 }
 
-const handleKnowledgeBaseChange = (ragId) => {
-  selectKnowledgeBase(ragId)
-}
-
-const handlePromptTemplateChange = (templateId) => {
-  selectPromptTemplate(templateId)
-}
+// 已去除顶部配置事件（知识库/提示词）
 
 const startNewChat = () => {
   createNewChat()
@@ -701,32 +510,14 @@ const clearChat = () => {
   clearHistory()
 }
 
-const handleBuildCommand = (command) => {
-  if (command === 'buildRepo') {
-    handleRepoCommand('local')
-  } else if (command === 'buildAgent') {
-    // 这里可以添加构建智能体的逻辑
-    ElMessage.info('构建智能体功能待实现')
-  }
-}
-
-const handleUploadCommand = (command) => {
-  if (command === 'uploadFiles') {
-    handleUploadFiles()
-  } else if (command === 'parseGit') {
-    handleParseGit()
-  }
-}
+// 已去除构建/上传的下拉命令
 
 const getCurrentAgentName = () => {
   const agent = agentList.value.find(a => a.id === selectedAgentId.value)
   return agent ? agent.agentName : '未知智能体'
 }
 
-const getCurrentRagName = () => {
-  const rag = ragList.value.find(r => r.id === selectedRagId.value)
-  return rag ? rag.name : '未知知识库'
-}
+// 已去除知识库名称函数
 
 // 历史对话相关方法
 const chatHistory = computed(() => {
@@ -742,7 +533,7 @@ const loadChatHistory = async () => {
   if (!selectedAgentId.value) return
   
   try {
-    const response = await agentApi.getChatHistory(selectedAgentId.value, selectedRagId.value)
+    const response = await agentApi.getChatHistory(selectedAgentId.value)
     if (response.code === '0000') {
       chatList.value = response.data || []
     } else {
@@ -770,7 +561,7 @@ const saveChatRecord = async () => {
     const chatData = {
       id: currentChatId.value,
       agentId: selectedAgentId.value,
-      ragId: selectedRagId.value,
+      ragId: undefined,
       title: `与 ${getCurrentAgentName()} 的对话`,
       messages: currentMessages.value,
       createdTime: new Date()
@@ -905,8 +696,11 @@ const sendMessage = async () => {
       answer: assistantMessage.content,
       timestamp: new Date(),
       agent: getCurrentAgentName(),
-      rag: selectedRagId.value ? getCurrentRagName() : null
+      rag: null
     })
+
+    // 流式完成后统一保存
+    if (currentChatId.value && currentMessages.value.length > 0) saveChatRecord()
 
   } catch (error) {
     console.error('对话失败:', error)
@@ -946,11 +740,14 @@ const sendAutoAgentMessage = async (message, assistantMessage) => {
       params,
       // onMessage callback
       (data) => {
+        console.log('=== 前端收到SSE消息 ===', data)
         if (data.type) {
           // 处理结构化的SSE数据
+          console.log('处理结构化数据:', data)
           handleStructuredResponse(data, assistantMessage)
         } else {
           // 处理普通文本消息
+          console.log('处理普通文本消息:', data)
           const content = data.content || data.message || ''
           if (content) {
             assistantMessage.content += content
@@ -1010,6 +807,12 @@ const handleStructuredResponse = (data, assistantMessage) => {
       }
       if (subType) {
         switch (subType) {
+          case 'step_start':
+            formattedContent += `🚀 **${content}**\n`
+            break
+          case 'analysis_start':
+            formattedContent += `🔄 **${content}**\n`
+            break
           case 'analysis_status':
             formattedContent += `📊 **任务状态分析:**\n${content}\n`
             break
@@ -1036,6 +839,9 @@ const handleStructuredResponse = (data, assistantMessage) => {
       }
       if (subType) {
         switch (subType) {
+          case 'execution_start':
+            formattedContent += `🔄 **${content}**\n`
+            break
           case 'execution_target':
             formattedContent += `🎯 **执行目标:**\n${content}\n`
             break
@@ -1062,6 +868,9 @@ const handleStructuredResponse = (data, assistantMessage) => {
       }
       if (subType) {
         switch (subType) {
+          case 'supervision_start':
+            formattedContent += `🔄 **${content}**\n`
+            break
           case 'supervision_assessment':
             formattedContent += `📋 **质量评估:**\n${content}\n`
             break
@@ -1114,11 +923,16 @@ const handleStructuredResponse = (data, assistantMessage) => {
   assistantMessage.isStreaming = !completed
   
   // 强制触发Vue的响应式更新
+  const messageIndex = currentMessages.value.length - 1
+  if (messageIndex >= 0) {
+    currentMessages.value[messageIndex] = { ...assistantMessage }
+  }
+  
   nextTick(() => {
     scrollToBottom()
   })
   
-  console.log('更新消息内容，当前长度:', assistantMessage.content.length, '流式状态:', assistantMessage.isStreaming)
+  console.log('更新消息内容，当前长度:', assistantMessage.content.length, '流式状态:', assistantMessage.isStreaming, '消息索引:', messageIndex)
 }
 
 const askQuestion = (question) => {
@@ -1210,12 +1024,7 @@ const regenerateResponse = async (messageIndex) => {
   isLoading.value = true
   
   try {
-    const params = {
-      agentId: selectedAgentId.value,
-      message: userMessage.content,
-      ragId: selectedRagId.value || undefined,
-      promptTemplateId: selectedPromptTemplate.value || undefined
-    }
+    const params = { agentId: selectedAgentId.value, message: userMessage.content }
 
     const response = await agentApi.chatWithAgent(params)
 

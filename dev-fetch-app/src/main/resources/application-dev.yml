@@ -58,8 +58,9 @@ spring:
             idle-timeout: 30000
             connection-timeout: 30000
     openai:
-      base-url: https://apis.itedus.cn
-      api-key: sk-oFfYLM1fUVsrWFwA1fA32dDcE6A441C48b70A3D09e68CeF2
+#      base-url: https://apis.itedus.cn
+      base-url: http://14.103.155.193:11434
+      api-key: ollama
 
 
 

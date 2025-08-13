@@ -3,3 +3,16 @@ spring:
     name: SmartAI-Assistant
   profiles:
     active: dev
+
+# 聊天内容配置
+chat:
+  content:
+    size-threshold: 65536  # 64KB，超过此大小使用大内容处理
+    compression-enabled: true  # 启用内容压缩
+    compression-type: gzip  # 压缩算法
+    deduplication-enabled: true  # 启用内容去重
+    chunk-size: 1048576  # 1MB，内容块大小
+    cache-enabled: true  # 启用缓存
+    cache-expiration-hours: 24  # 缓存过期时间（小时）
+    max-cache-size-mb: 100  # 最大缓存大小（MB）
+    verbose-logging: false  # 详细日志

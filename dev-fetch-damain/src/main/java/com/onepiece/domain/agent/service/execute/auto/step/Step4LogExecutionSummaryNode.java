@@ -78,7 +78,7 @@ public class Step4LogExecutionSummaryNode extends AbstractExecuteSupport {
             // 获取对话客户端 - 使用任务分析客户端进行总结
             AiAgentClientFlowConfigVO aiAgentClientFlowConfigVO = dynamicContext.getAiAgentClientFlowConfigVOMap().get(AiClientTypeEnumVO.RESPONSE_ASSISTANT.getCode());
             // 直接使用预热好的模型创建ChatClient
-            ChatClient chatClient = createChatClientFromModel();
+            ChatClient chatClient = createChatClientFromConfig(dynamicContext);
             
             String summaryResult = chatClient
                     .prompt(summaryPrompt)
@@ -253,22 +253,26 @@ public class Step4LogExecutionSummaryNode extends AbstractExecuteSupport {
     }
     
     /**
-     * 直接使用预热好的模型创建ChatClient
+     * 使用预热好的模型创建ChatClient
      */
-    private ChatClient createChatClientFromModel() {
-        // 使用预热好的模型ID 2
-        Long modelId = 2L;
-        String modelBeanName = "AiClientModel_" + modelId;
+    private ChatClient createChatClientFromConfig(DefaultAutoAgentExecuteStrategyFactory.DynamicContext dynamicContext) {
+        // 直接使用预热好的模型，按优先级尝试
+        Long[] modelIds = {3L,2L, 1L}; // 按优先级排序
         
-        try {
-            OpenAiChatModel chatModel = getBean(modelBeanName);
-            return ChatClient.builder(chatModel)
-                    .defaultSystem("AI 智能体")
-                    .build();
-        } catch (Exception e) {
-            log.error("创建ChatClient失败，模型Bean: {}", modelBeanName, e);
-            throw new RuntimeException("无法创建ChatClient，模型不可用: " + modelBeanName, e);
+        for (Long modelId : modelIds) {
+            String modelBeanName = "AiClientModel_" + modelId;
+            try {
+                OpenAiChatModel chatModel = getBean(modelBeanName);
+                log.info("成功使用预热好的模型Bean: {}", modelBeanName);
+                return ChatClient.builder(chatModel)
+                        .defaultSystem("AI 智能体")
+                        .build();
+            } catch (Exception e) {
+                log.warn("模型Bean {} 不可用，尝试下一个: {}", modelBeanName, e.getMessage());
+            }
         }
+        
+        throw new RuntimeException("无法创建ChatClient，所有预热模型都不可用。请检查智能体预热状态。");
     }
 
 }

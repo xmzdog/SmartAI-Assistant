@@ -76,4 +76,8 @@ public interface IAiAgentFlowConfigDao {
      */
     List<AiAgentFlowConfig> queryAll();
 
+    /** 带模型名的管理端查询 */
+    List<java.util.Map<String, Object>> queryByAgentIdWithModelName(String agentId);
+    List<java.util.Map<String, Object>> queryAllWithModelName();
+
 }

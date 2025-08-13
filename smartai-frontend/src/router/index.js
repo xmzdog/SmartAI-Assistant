@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 // 页面组件
 import Dashboard from '@/views/Dashboard.vue'
-import ChatPage from '@/views/ChatPage.vue'
 
 // 智能体管理
 import AgentManagement from '@/views/agent/AgentManagement.vue'
@@ -19,6 +18,7 @@ import KnowledgeBase from '@/views/knowledge/KnowledgeBase.vue'
 import SystemPrompt from '@/views/system/SystemPrompt.vue'
 import AdvisorConfig from '@/views/system/AdvisorConfig.vue'
 import McpTools from '@/views/system/McpTools.vue'
+import AgentFlowConfig from '@/views/system/AgentFlowConfig.vue'
 
 // 任务管理
 import TaskSchedule from '@/views/task/TaskSchedule.vue'
@@ -37,12 +37,6 @@ const routes = [
     name: 'Dashboard',
     component: Dashboard,
     meta: { title: '仪表板', icon: 'Dashboard' }
-  },
-  {
-    path: '/chat',
-    name: 'Chat',
-    component: ChatPage,
-    meta: { title: '智能对话', icon: 'ChatLineSquare' }
   },
   {
     path: '/agent',
@@ -96,6 +90,12 @@ const routes = [
         name: 'McpTools',
         component: McpTools,
         meta: { title: 'MCP工具' }
+      },
+      {
+        path: 'flow-config',
+        name: 'AgentFlowConfig',
+        component: AgentFlowConfig,
+        meta: { title: '流程配置' }
       }
     ]
   },

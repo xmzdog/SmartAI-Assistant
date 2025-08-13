@@ -44,7 +44,7 @@ public class DefaultArmoryStrategyFactory {
     }
 
     public ChatClient chatClient(Long clientId) {
-        return (ChatClient) applicationContext.getBean("ChatClient_" + clientId);
+        return (ChatClient) applicationContext.getBean("ai_client_" + clientId);
     }
 
     public ChatModel chatModel(Long modelId) {

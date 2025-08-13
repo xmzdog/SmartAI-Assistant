@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepiece.infrastructure.dao.IAiChatSessionDao">
+
+    <resultMap id="aiChatSessionMap" type="com.onepiece.infrastructure.dao.po.AiChatSession">
+        <id column="id" property="id"/>
+        <result column="agent_id" property="agentId"/>
+        <result column="rag_id" property="ragId"/>
+        <result column="session_title" property="sessionTitle"/>
+        <result column="message_count" property="messageCount"/>
+        <result column="last_message_time" property="lastMessageTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.onepiece.infrastructure.dao.po.AiChatSession">
+        INSERT INTO ai_chat_session (
+            id, agent_id, rag_id, session_title, message_count, last_message_time, create_time, update_time
+        ) VALUES (
+            #{id}, #{agentId}, #{ragId}, #{sessionTitle}, #{messageCount}, #{lastMessageTime}, NOW(), NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="com.onepiece.infrastructure.dao.po.AiChatSession">
+        UPDATE ai_chat_session 
+        SET session_title = #{sessionTitle},
+            message_count = #{messageCount},
+            last_message_time = #{lastMessageTime},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateMessageStats">
+        UPDATE ai_chat_session 
+        SET message_count = #{messageCount},
+            last_message_time = #{lastMessageTime},
+            update_time = NOW()
+        WHERE id = #{sessionId}
+    </update>
+
+    <select id="queryById" parameterType="java.lang.String" resultMap="aiChatSessionMap">
+        SELECT id, agent_id, rag_id, session_title, message_count, last_message_time, create_time, update_time
+        FROM ai_chat_session
+        WHERE id = #{id}
+    </select>
+
+    <select id="queryByAgentId" resultMap="aiChatSessionMap">
+        SELECT id, agent_id, rag_id, session_title, message_count, last_message_time, create_time, update_time
+        FROM ai_chat_session
+        WHERE agent_id = #{agentId}
+        <if test="ragId != null">
+            AND (rag_id = #{ragId} OR rag_id IS NULL)
+        </if>
+        ORDER BY last_message_time DESC, create_time DESC
+        LIMIT 50
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.String">
+        DELETE FROM ai_chat_session WHERE id = #{id}
+    </delete>
+
+</mapper>

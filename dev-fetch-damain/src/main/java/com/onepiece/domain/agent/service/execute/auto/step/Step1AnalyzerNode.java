@@ -25,11 +25,26 @@ public class Step1AnalyzerNode extends AbstractExecuteSupport {
     protected String doApply(ExecuteCommandEntity requestParameter, DefaultAutoAgentExecuteStrategyFactory.DynamicContext dynamicContext) throws Exception {
         log.info("\n🎯 === 执行第 {} 步 ===", dynamicContext.getStep());
 
+        // 立即发送步骤开始的通知
+        AutoAgentExecuteResultEntity stepStartResult = AutoAgentExecuteResultEntity.createAnalysisSubResult(
+                dynamicContext.getStep(), "step_start", 
+                "开始执行第 " + dynamicContext.getStep() + " 步：任务分析", 
+                requestParameter.getSessionId());
+        sendSseResult(dynamicContext, stepStartResult);
+
         // 获取配置信息
         AiAgentClientFlowConfigVO aiAgentClientFlowConfigVO = dynamicContext.getAiAgentClientFlowConfigVOMap().get(AiClientTypeEnumVO.TASK_ANALYZER_CLIENT.getCode());
 
         // 第一阶段：任务分析
         log.info("\n📊 阶段1: 任务状态分析");
+        
+        // 发送分析开始的通知
+        AutoAgentExecuteResultEntity analysisStartResult = AutoAgentExecuteResultEntity.createAnalysisSubResult(
+                dynamicContext.getStep(), "analysis_start", 
+                "正在分析任务状态...", 
+                requestParameter.getSessionId());
+        sendSseResult(dynamicContext, analysisStartResult);
+        
         String analysisPrompt = String.format(aiAgentClientFlowConfigVO.getStepPrompt(),
                 requestParameter.getMessage(),
                 dynamicContext.getStep(),
@@ -38,8 +53,8 @@ public class Step1AnalyzerNode extends AbstractExecuteSupport {
                 dynamicContext.getCurrentTask()
         );
 
-        // 直接使用预热好的模型创建ChatClient
-        ChatClient chatClient = createChatClientFromModel();
+        // 使用智能体配置的客户端创建ChatClient
+        ChatClient chatClient = createChatClientFromConfig(dynamicContext);
 
         String analysisResult = chatClient
                 .prompt(analysisPrompt)
@@ -170,22 +185,26 @@ public class Step1AnalyzerNode extends AbstractExecuteSupport {
     }
     
     /**
-     * 直接使用预热好的模型创建ChatClient
+     * 使用预热好的模型创建ChatClient
      */
-    private ChatClient createChatClientFromModel() {
-        // 使用预热好的模型ID 2
-        Long modelId = 2L;
-        String modelBeanName = "AiClientModel_" + modelId;
+    private ChatClient createChatClientFromConfig(DefaultAutoAgentExecuteStrategyFactory.DynamicContext dynamicContext) {
+        // 直接使用预热好的模型，按优先级尝试
+        Long[] modelIds = {3L,2L, 1L}; // 按优先级排序
         
-        try {
-            OpenAiChatModel chatModel = getBean(modelBeanName);
-            return ChatClient.builder(chatModel)
-                    .defaultSystem("AI 智能体")
-                    .build();
-        } catch (Exception e) {
-            log.error("创建ChatClient失败，模型Bean: {}", modelBeanName, e);
-            throw new RuntimeException("无法创建ChatClient，模型不可用: " + modelBeanName, e);
+        for (Long modelId : modelIds) {
+            String modelBeanName = "AiClientModel_" + modelId;
+            try {
+                OpenAiChatModel chatModel = getBean(modelBeanName);
+                log.info("成功使用预热好的模型Bean: {}", modelBeanName);
+                return ChatClient.builder(chatModel)
+                        .defaultSystem("AI 智能体")
+                        .build();
+            } catch (Exception e) {
+                log.warn("模型Bean {} 不可用，尝试下一个: {}", modelBeanName, e.getMessage());
+            }
         }
+        
+        throw new RuntimeException("无法创建ChatClient，所有预热模型都不可用。请检查智能体预热状态。");
     }
 
 }

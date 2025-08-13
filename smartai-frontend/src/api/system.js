@@ -88,3 +88,22 @@ export const mcpToolApi = {
     return request.get('/v1/ai/admin/client/tool/mcp/deleteMcp', { params: { id } })
   }
 }
+
+// 智能体流程配置 API
+export const agentFlowConfigApi = {
+  list(params = {}) {
+    return request.post('/v1/ai/admin/agent/flow/config/list', params)
+  },
+  get(id) {
+    return request.get('/v1/ai/admin/agent/flow/config/get', { params: { id } })
+  },
+  add(cfg) {
+    return request.post('/v1/ai/admin/agent/flow/config/add', cfg)
+  },
+  update(cfg) {
+    return request.post('/v1/ai/admin/agent/flow/config/update', cfg)
+  },
+  delete(id) {
+    return request.get('/v1/ai/admin/agent/flow/config/delete', { params: { id } })
+  }
+}

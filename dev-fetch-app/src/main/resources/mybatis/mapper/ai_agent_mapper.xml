@@ -44,7 +44,7 @@
         INSERT INTO ai_agent (
             agent_name, channel, description, status, create_time, update_time
         ) VALUES (
-            #{agentName}, #{description}, #{status}, #{createTime}, #{updateTime}
+            #{agentName}, #{channel}, #{description}, #{status}, #{createTime}, #{updateTime}
         )
     </insert>
     
